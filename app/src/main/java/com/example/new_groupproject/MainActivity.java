@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i = 0 ; i<ib_id.length;i++){
             if(view.getId()==ib_id[i]){
                 switch (i) {
-                    //history
+                    //history love you so much
                     case 0:
                         break;
                     //setting
