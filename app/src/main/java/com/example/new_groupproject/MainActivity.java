@@ -36,25 +36,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Class class_array[]={history_record.class,setting_page.class,scanning_barcode.class};
         for(int i = 0 ; i<ib_id.length;i++){
-            if(view.getId()==ib_id[i]){
+            if(view.getId()==ib_id[i]&&view.getId()!=ib_id[2]){
                 switch (i) {
-                    //history love you so much
+                    //history
                     case 0:
                         break;
                     //setting
                     case 1:
                         break;
-                    //Barcode scanning
-                    case 2:
-                        scanCode();
-                        break;
+
 
 
                 }
                 StartNewActivity(class_array[i]);
             }
         }
-
+        if(view.getId()==ib_id[2]){
+            scanCode();
+        }
     }
     //New activity with no things pass thoruh, only start new activity
     public void StartNewActivity(Class i){
