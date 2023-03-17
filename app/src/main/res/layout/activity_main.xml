@@ -8,7 +8,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="88dp"
+        tools:layout_editor_absoluteY="142dp">
 
         <ImageButton
             android:id="@+id/setting_ib"
@@ -21,6 +23,14 @@
             android:padding="20dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/setting_ib" />
+
+        <TextView
+            android:id="@+id/current_Date"
+            android:layout_width="match_parent"
+            android:layout_height="369dp"
+            android:gravity="center|center_horizontal"
+            android:text="Date"
+            android:textSize="34sp" />
 
         <ImageButton
             android:id="@+id/history_ib"

@@ -7,29 +7,47 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
-
+    TextView current_Date;
+    String TAG = "Current Time: ";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init_object();
+        // Add date and time in the background
+        Date currentTime = Calendar.getInstance().getTime();
+        // set the format of time
+        String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
+        current_Date.setText(String.valueOf(format));
 
     }
     public void init_object(){
+        // init image Button objects
         for(int i = 0 ; i<ib_id.length;i++){
             ib_list[i] = findViewById(ib_id[i]);
             ib_list[i].setOnClickListener(this);
         }
+        // init TextView object
+        current_Date = findViewById(R.id.current_Date);
     }
 
     @Override
@@ -55,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             scanCode();
         }
     }
-    //New activity with no things pass thoruh, only start new activity
+    //New activity with no things pass through, only start new activity
     public void StartNewActivity(Class i){
         Intent c = new Intent(getApplicationContext(),i);
         startActivity(c);
