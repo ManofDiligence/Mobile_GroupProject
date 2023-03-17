@@ -4,8 +4,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    //database of sharedpreferences
+    SharedPreferences sharedPreferences;
+    public static final String productinfo ="Product_info";
+    public  static  final  String Product_name = "product_nameKEY";
+    public static final String gram_sugar = "sugarKEY";
+    public static final String cube_sugar = "cube_sugarKEY";
+    public static final String barCode = "CodeKeyKEY";
+
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
@@ -41,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // set the format of time
         String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
         current_Date.setText(String.valueOf(format));
+
+        //set shared preferences file and made
+        sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
 
     }
     public void init_object(){
@@ -92,7 +106,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         options.setCaptureActivity(scanning_barcode.class);
         barLauncher.launch(options);
     }
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result -> {
+
+    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
+    {
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
