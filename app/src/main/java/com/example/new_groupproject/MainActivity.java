@@ -25,13 +25,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
-    TextView current_Date;
-    String TAG = "Current Time: ";
+    TextView current_Date, standardValue, cubesOfSugar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Hide the title bar from this page
+        getSupportActionBar().hide();
+        // init all the needed objects
         init_object();
         // Add date and time in the background
         Date currentTime = Calendar.getInstance().getTime();
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         // init TextView object
         current_Date = findViewById(R.id.current_Date);
+        standardValue = findViewById(R.id.standardValue);
+        cubesOfSugar = findViewById(R.id.cubesOfSugar);
     }
 
     @Override
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(c);
     }
 
-    //just some scaninning codes
+    //just some scanning codes
     private void scanCode(){
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");

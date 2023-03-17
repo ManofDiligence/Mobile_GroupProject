@@ -2,11 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CL1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/RL1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="88dp"
@@ -30,6 +32,23 @@
             android:layout_height="369dp"
             android:gravity="center|center_horizontal"
             android:text="Date"
+            android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/cubesOfSugar"
+            android:layout_width="match_parent"
+            android:layout_height="688dp"
+            android:gravity="center"
+            android:text="@string/cubesOfSugar"
+            android:textColor="@color/black"
+            android:textSize="78sp" />
+
+        <TextView
+            android:id="@+id/standardValue"
+            android:layout_width="match_parent"
+            android:layout_height="460dp"
+            android:gravity="bottom|center"
+            android:text="@string/standardValue"
             android:textSize="34sp" />
 
         <ImageButton

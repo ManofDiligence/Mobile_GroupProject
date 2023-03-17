@@ -10,5 +10,7 @@ public class history_record extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_record);
+        // add title to the top of this page
+        setTitle("Records");
     }
 }

@@ -19,7 +19,8 @@ public class setting_page extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_page);
-
+        // add title for this page
+        setTitle("Settings");
         lv_setting = findViewById(R.id.lv_setting);
         ArrayAdapter<String> setting_array_list =
                 new ArrayAdapter<String>(
