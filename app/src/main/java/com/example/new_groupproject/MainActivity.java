@@ -3,19 +3,23 @@ package com.example.new_groupproject;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -23,7 +27,10 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import android.graphics.Rect;
+import android.util.AttributeSet;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
@@ -33,16 +40,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String cube_sugar = "cube_sugarKEY";
     public static final String barCode = "CodeKeyKEY";
 
+
+//Sensor oject
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private float xPosition, yPosition;
+    private ImageView sugar;
+
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
     TextView current_Date, standardValue, cubesOfSugar;
 
+    ConstraintLayout CL1 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Hide the title bar from this page
         getSupportActionBar().hide();
         // init all the needed objects
@@ -52,9 +68,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // set the format of time
         String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
         current_Date.setText(String.valueOf(format));
-
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
+        //sensing object
+        sugar = findViewById(R.id.sugar);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        xPosition = sugar.getX();
+        yPosition = sugar.getY();
+
 
     }
     public void init_object(){
@@ -67,8 +90,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         current_Date = findViewById(R.id.current_Date);
         standardValue = findViewById(R.id.standardValue);
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
+        CL1 = findViewById(R.id.CL1);
+
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+
+    }
     @Override
     public void onClick(View view) {
         Class class_array[]={history_record.class,setting_page.class,scanning_barcode.class};
@@ -120,4 +157,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).show();
     }});
+///sugar moving AREA
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+
+
+        // calculate the new position of the ImageView based on accelerometer data : Warning , comment provided by GPT , please retype by own wording , adjust the calculation to run it smoothly
+        xPosition -= x * 5;
+        yPosition += y * 5;
+
+        // make sure the ImageView stays within the view border : Warning , comment provided by GPT , please retype by own wording
+        if (xPosition < 0) xPosition = 0;
+        if (yPosition < 0) yPosition = 0;
+        //not working code, still figuring how to prevent get out from the bottom and the right
+        //if(xPosition>1080) xPosition = 1080;
+        //if(yPosition>1920) yPosition=1920;
+
+        //fixing with the border issue , still fixing
+/*
+        ViewTreeObserver viewTreeObserver = CL1.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Remove the listener to prevent multiple calls : Warning , comment provided by GPT , please retype by own wording
+                CL1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Get the height of the ConstraintLayout, taking into account any constraints or layout rules : Warning , comment provided by GPT , please retype by own wording
+                int constraintLayoutHeight = CL1.getHeight();
+                int constraintLayoutWidth = CL1.getWidth();
+
+                // Use the height to constrain the position of the ImageView : Warning , comment provided by GPT , please retype by own wording
+                if (yPosition > constraintLayoutHeight ) {
+                    yPosition = constraintLayoutHeight;
+                }
+                if (xPosition > constraintLayoutWidth ) {
+                   xPosition = constraintLayoutWidth;
+                }
+            }
+        });*/
+
+        // update the position of the ImageView on the screen : Warning , comment provided by GPT , please retype by own wording
+        sugar.setX(xPosition);
+        sugar.setY(yPosition);
+        // Set the new position and rotation of the ImageView : Warning , comment provided by GPT , please retype by own wording
+        sugar.setTranslationX(xPosition);
+        sugar.setTranslationY(yPosition);
+        //rotation of the sugar , configur it to run it smoothly
+        sugar.setRotation(-xPosition * 3.0f);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 }
