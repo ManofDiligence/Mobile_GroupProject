@@ -1,6 +1,7 @@
 package com.example.new_groupproject;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.Dimension;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.journeyapps.barcodescanner.ScanContract;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView current_Date, standardValue, cubesOfSugar;
 
     ConstraintLayout CL1 ;
+    RelativeLayout RL1;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         standardValue = findViewById(R.id.standardValue);
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
         CL1 = findViewById(R.id.CL1);
+        RL1 = findViewById(R.id.RL1);
 
 
     }
@@ -171,32 +178,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // make sure the ImageView stays within the view border : Warning , comment provided by GPT , please retype by own wording
         if (xPosition < 0) xPosition = 0;
         if (yPosition < 0) yPosition = 0;
-        //not working code, still figuring how to prevent get out from the bottom and the right
-        //if(xPosition>1080) xPosition = 1080;
-        //if(yPosition>1920) yPosition=1920;
+        if(xPosition>getApplicationContext().getResources().getDisplayMetrics().widthPixels-sugar.getWidth()) xPosition = getApplicationContext().getResources().getDisplayMetrics().widthPixels - sugar.getWidth();
+        if(yPosition>getApplicationContext().getResources().getDisplayMetrics().heightPixels-sugar.getHeight()) yPosition = getApplicationContext().getResources().getDisplayMetrics().heightPixels  - sugar.getHeight();
 
-        //fixing with the border issue , still fixing
-/*
-        ViewTreeObserver viewTreeObserver = CL1.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Remove the listener to prevent multiple calls : Warning , comment provided by GPT , please retype by own wording
-                CL1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                // Get the height of the ConstraintLayout, taking into account any constraints or layout rules : Warning , comment provided by GPT , please retype by own wording
-                int constraintLayoutHeight = CL1.getHeight();
-                int constraintLayoutWidth = CL1.getWidth();
-
-                // Use the height to constrain the position of the ImageView : Warning , comment provided by GPT , please retype by own wording
-                if (yPosition > constraintLayoutHeight ) {
-                    yPosition = constraintLayoutHeight;
-                }
-                if (xPosition > constraintLayoutWidth ) {
-                   xPosition = constraintLayoutWidth;
-                }
-            }
-        });*/
 
         // update the position of the ImageView on the screen : Warning , comment provided by GPT , please retype by own wording
         sugar.setX(xPosition);
