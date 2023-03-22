@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String barCode = "CodeKeyKEY";
 
 
-//Sensor oject
+    //Sensor oject
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float xPosition, yPosition;
@@ -53,11 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton ib_list[]=new ImageButton[3];
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
     TextView current_Date, standardValue, cubesOfSugar;
-
-    ConstraintLayout CL1 ;
-    RelativeLayout RL1;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         current_Date.setText(String.valueOf(format));
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(barCode,"8885012291781");
+        editor.commit();
+        editor.apply();
+
         //sensing object
         sugar = findViewById(R.id.sugar);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -96,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         current_Date = findViewById(R.id.current_Date);
         standardValue = findViewById(R.id.standardValue);
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
-        CL1 = findViewById(R.id.CL1);
-        RL1 = findViewById(R.id.RL1);
 
 
     }
@@ -142,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(c);
     }
 
+
+
+
     //just some scanning codes
     private void scanCode(){
         ScanOptions options = new ScanOptions();
@@ -153,10 +154,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
+        String barcodeval = (sharedPreferences.getString(barCode,""));
+
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
-        builder.setMessage(result.getContents());
+        //builder.setMessage(result.getContents());
+            // trying to get the barcode and compair the shared preference
+            if(result.getContents()==barcodeval){
+                builder.setMessage("get");
+            }
+            else{
+                builder.setMessage("notget");
+            }
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -164,6 +174,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).show();
     }});
+
+
+
+
+
 ///sugar moving AREA
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -196,4 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
+
+
+
+
 }
