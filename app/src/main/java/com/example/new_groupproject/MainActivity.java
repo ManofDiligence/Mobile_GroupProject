@@ -26,8 +26,11 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -62,21 +65,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Hide the title bar from this page
         getSupportActionBar().hide();
+
         // init all the needed objects
         init_object();
+
         // Add date and time in the background
         Date currentTime = Calendar.getInstance().getTime();
+
         // set the format of time
         String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
         current_Date.setText(String.valueOf(format));
-        //set shared preferences file and made
-        sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(barCode,"8885012291781");
-        editor.commit();
-        editor.apply();
 
-        //sensing object
+
+        //sensing object , Do not change unless inneeded
         sugar = findViewById(R.id.sugar);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -84,20 +85,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         xPosition = sugar.getX();
         yPosition = sugar.getY();
 
-
     }
     public void init_object(){
+
         // init image Button objects
         for(int i = 0 ; i<ib_id.length;i++){
             ib_list[i] = findViewById(ib_id[i]);
             ib_list[i].setOnClickListener(this);
         }
+
         // init TextView object
         current_Date = findViewById(R.id.current_Date);
         standardValue = findViewById(R.id.standardValue);
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
+        //set shared preferences file and made
+        sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        //hard coding area of inputting the value into sharedpreference
+        //please DELETE THE APP after adding new product items
+        //Barcode data
+        Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
+        barcode_key.add("4890008333240");
+        barcode_key.add("8885012291781");
+        //Product name data
+        Set<String> product_name = sharedPreferences.getStringSet("product_nameKEY",new HashSet<String >());
+        product_name.add("葡萄適 Lucozade - Sport 運動飲料 - 橙味 - 樽裝 450毫升");
+        product_name.add("水動樂 Aquarius - 零系電解質補充飲品 - 樽裝 500毫升");
+
+        editor.putStringSet("CodeKeyKEY",barcode_key);
+        editor.putStringSet("product_nameKEY",product_name);
+
+        editor.apply();
     }
 
     @Override
@@ -111,20 +131,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sensorManager.unregisterListener(this);
 
     }
+
     @Override
     public void onClick(View view) {
         Class class_array[]={history_record.class,setting_page.class,scanning_barcode.class};
         for(int i = 0 ; i<ib_id.length;i++){
             if(view.getId()==ib_id[i]&&view.getId()!=ib_id[2]){
                 switch (i) {
-                    //history
+                    //history xml
                     case 0:
                         break;
-                    //setting
+                    //setting xml
                     case 1:
                         break;
-
-
 
                 }
                 StartNewActivity(class_array[i]);
@@ -134,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             scanCode();
         }
     }
+
     //New activity with no things pass through, only start new activity
     public void StartNewActivity(Class i){
         Intent c = new Intent(getApplicationContext(),i);
@@ -141,9 +161,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-    //just some scanning codes
+    //just some scanning codes,current gradle using below.
+    //https://github.com/journeyapps/zxing-android-embedded
     private void scanCode(){
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");
@@ -154,19 +173,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
-        String barcodeval = (sharedPreferences.getString(barCode,""));
+        //String barcodeval = (sharedPreferences.getString("CodeKeyKEY",""));
 
+        //Trying to get the value search in the sharedpreferences
+        Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
+        String[] nbarcode_key = (new String[barcode_key.size()]);
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
         //builder.setMessage(result.getContents());
+            if (nbarcode_key != null) {
+                for (String value : nbarcode_key) {
+                    if(result.getContents().equals(value)){
+
+                        builder.setMessage("get");
+                    }
+                    else{
+                        builder.setMessage("not get");
+                    }
+                }
+            }
+
             // trying to get the barcode and compair the shared preference
-            if(result.getContents()==barcodeval){
+            //sample code for reference , pls don't delete first
+            /*if(result.getContents().equals(nbarcode_key)){
+
                 builder.setMessage("get");
             }
             else{
-                builder.setMessage("notget");
-            }
+                builder.setMessage("not get");
+            }*/
+
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -175,11 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).show();
     }});
 
-
-
-
-
-///sugar moving AREA
+///sugar moving AREA based on user phone
     @Override
     public void onSensorChanged(SensorEvent event) {
         float x = event.values[0];
@@ -203,16 +236,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set the new position and rotation of the ImageView : Warning , comment provided by GPT , please retype by own wording
         sugar.setTranslationX(xPosition);
         sugar.setTranslationY(yPosition);
-        //rotation of the sugar , configur it to run it smoothly
+        //rotation of the sugar , configure it to run it smoothly
         sugar.setRotation(-xPosition * 3.0f);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
+        //No action needed in this class
     }
-
-
-
 
 }
