@@ -36,7 +36,9 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-
+    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
+    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
+    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
     public static final String productinfo ="Product_info";
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putStringSet("product_nameKEY",product_name);
 
         editor.apply();
+
     }
 
     @Override
@@ -176,15 +179,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //String barcodeval = (sharedPreferences.getString("CodeKeyKEY",""));
 
         //Trying to get the value search in the sharedpreferences
-        Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
-        String[] nbarcode_key = (new String[barcode_key.size()]);
+        //Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
+        //String[] nbarcode_key = (new String[barcode_key.size()]);
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
-        //builder.setMessage(result.getContents());
+       /* builder.setMessage(result.getContents());
             if (nbarcode_key != null) {
                 for (String value : nbarcode_key) {
-                    if(result.getContents().equals(value)){
+                    if(result.getContents().equals(barcodeval)){
 
                         builder.setMessage("get");
                     }
@@ -193,13 +196,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
-
+*/
             // trying to get the barcode and compair the shared preference
             //sample code for reference , pls don't delete first
-            /*if(result.getContents().equals(nbarcode_key)){
-
+            //if(result.getContents().equals(nbarcode_key)){
                 builder.setMessage("get");
-            }
+           /* }
             else{
                 builder.setMessage("not get");
             }*/
