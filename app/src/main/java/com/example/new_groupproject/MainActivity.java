@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import android.graphics.Rect;
@@ -189,30 +190,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Trying to get the value search in the sharedpreferences
         //Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
         //String[] nbarcode_key = (new String[barcode_key.size()]);
+        Iterator<String> i = barcode_key.iterator();
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
         //builder.setMessage(result.getContents());
             if (barcode_key != null) {
-                for (String value : barcode_key) {
-                    if(result.getContents().equals(value)){
+                while(i.hasNext()) {
+                    if(result.getContents().equals(i.next())){
                         builder.setMessage("get!\n"+"The barcode is "+ result.getContents());
-
                     }
                     else{
                         builder.setMessage("not get");
                     }
                 }
             }
-
-            // trying to get the barcode and compare to the shared preference
-            //sample code for reference , pls don't delete first
-            //if(result.getContents().equals(nbarcode_key)){
-               // builder.setMessage("get");
-           /* }
-            else{
-                builder.setMessage("not get");
-            }*/
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
