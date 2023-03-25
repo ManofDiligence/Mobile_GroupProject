@@ -34,6 +34,7 @@ import java.util.Set;
 
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
     /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
@@ -42,10 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
     public static final String productinfo ="Product_info";
-    public  static  final  String Product_name = "product_nameKEY";
+    public static final String ProductKey = "product_nameKEY";
     public static final String gram_sugar = "sugarKEY";
     public static final String cube_sugar = "cube_sugarKEY";
-    public static final String barCode = "CodeKeyKEY";
+    public static final String barCodeKey = "CodeKeyKEY";
+    //Product name data
+    public Set<String> product_name;
+    //Barcode data
+    public Set<String> barcode_key;
 
 
     //Sensor oject
@@ -107,21 +112,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //hard coding area of inputting the value into sharedpreference
         //please DELETE THE APP after adding new product items
-        //Barcode data
-        Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
+        product_name= sharedPreferences.getStringSet(ProductKey,new HashSet<String >());
+
+        barcode_key = sharedPreferences.getStringSet(barCodeKey,new HashSet<String >());
+        // add two data
         barcode_key.add("4890008333240");
         barcode_key.add("8885012291781");
-        //Product name data
-        Set<String> product_name = sharedPreferences.getStringSet("product_nameKEY",new HashSet<String >());
+
         product_name.add("葡萄適 Lucozade - Sport 運動飲料 - 橙味 - 樽裝 450毫升");
         product_name.add("水動樂 Aquarius - 零系電解質補充飲品 - 樽裝 500毫升");
 
-        editor.putStringSet("CodeKeyKEY",barcode_key);
-        editor.putStringSet("product_nameKEY",product_name);
-
+        editor.putStringSet(barCodeKey,barcode_key);
+        editor.putStringSet(ProductKey,product_name);
         editor.apply();
+        // make a log
+        Toast.makeText(getApplicationContext(), product_name.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
 
     }
+
 
     @Override
     protected void onResume() {
@@ -184,10 +192,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
-       /* builder.setMessage(result.getContents());
-            if (nbarcode_key != null) {
-                for (String value : nbarcode_key) {
-                    if(result.getContents().equals(barcodeval)){
+        //builder.setMessage(result.getContents());
+            if (barcode_key != null) {
+                for (String value : barcode_key) {
+                    if(result.getContents().equals(value)){
 
                         builder.setMessage("get");
                     }
@@ -196,11 +204,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
-*/
-            // trying to get the barcode and compair the shared preference
+
+            // trying to get the barcode and compare to the shared preference
             //sample code for reference , pls don't delete first
             //if(result.getContents().equals(nbarcode_key)){
-                builder.setMessage("get");
+               // builder.setMessage("get");
            /* }
             else{
                 builder.setMessage("not get");
