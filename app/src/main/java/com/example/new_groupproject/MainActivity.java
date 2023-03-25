@@ -15,6 +15,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
@@ -194,15 +195,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Result");
+        Boolean isSearched = false;
         //builder.setMessage(result.getContents());
             if (barcode_key != null) {
                 while(i.hasNext()) {
-                    if(result.getContents().equals(i.next())){
-                        builder.setMessage("get!\n"+"The barcode is "+ result.getContents());
+                    if(result.getContents().equals(i.next())) {
+                        builder.setMessage("get!\n" + "The barcode is " + result.getContents());
+                        isSearched = true;
                     }
-                    else{
-                        builder.setMessage("not get");
-                    }
+                }
+                if(!isSearched)
+                {
+                    Log.d("Vincent", "The product is not searched!");
                 }
             }
 
