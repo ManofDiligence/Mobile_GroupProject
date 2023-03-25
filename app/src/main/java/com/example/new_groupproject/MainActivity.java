@@ -196,8 +196,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (barcode_key != null) {
                 for (String value : barcode_key) {
                     if(result.getContents().equals(value)){
+                        builder.setMessage("get!\n"+"The barcode is "+ result.getContents());
 
-                        builder.setMessage("get");
                     }
                     else{
                         builder.setMessage("not get");
