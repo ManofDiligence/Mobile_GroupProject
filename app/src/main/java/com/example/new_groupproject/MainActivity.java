@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String gram_sugar = "sugarKEY";
     public static final String cube_sugar = "cube_sugarKEY";
     public static final String barCode = "CodeKeyKEY";
+    public static final String Product1 = "葡萄適 Lucozade - Sport 運動飲料 - 橙味 - 樽裝 450毫升";
+    public static final String Product2 = "水動樂 Aquarius - 零系電解質補充飲品 - 樽裝 500毫升";
+
+    public static final String Code1 = "4890008333240";
+    public static final String Code2 = "8885012291781";
 
 
     //Sensor oject
@@ -109,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //please DELETE THE APP after adding new product items
         //Barcode data
         Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
-        barcode_key.add("4890008333240");
-        barcode_key.add("8885012291781");
+        barcode_key.add(Code1);
+        barcode_key.add(Code2);
         //Product name data
         Set<String> product_name = sharedPreferences.getStringSet("product_nameKEY",new HashSet<String >());
-        product_name.add("葡萄適 Lucozade - Sport 運動飲料 - 橙味 - 樽裝 450毫升");
-        product_name.add("水動樂 Aquarius - 零系電解質補充飲品 - 樽裝 500毫升");
+        product_name.add(Product1);
+        product_name.add(Product2);
 
         editor.putStringSet("CodeKeyKEY",barcode_key);
         editor.putStringSet("product_nameKEY",product_name);
