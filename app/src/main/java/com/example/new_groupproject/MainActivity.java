@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Set<String> product_name;
     //Barcode data
     public Set<String> barcode_key;
+    //cube of sugar
+    public Set<String> cubeOfsugar;
 
 
     //Sensor oject
@@ -123,17 +125,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //hard coding area of inputting the value into sharedpreference
         //please DELETE THE APP after adding new product items
         product_name= sharedPreferences.getStringSet(ProductKey,new HashSet<String >());
-
+        cubeOfsugar = sharedPreferences.getStringSet(cube_sugar,new HashSet<String>());
         barcode_key = sharedPreferences.getStringSet(barCodeKey,new HashSet<String >());
         // add two data
-        barcode_key.add("4890008333240");
-        barcode_key.add("8885012291781");
+        barcode_key.add("4891513000122"); //1
+        barcode_key.add("4890008100156"); //2
+        barcode_key.add("4890008100293"); //3
+        barcode_key.add("4890008100231"); //4
+        barcode_key.add("4890008101238"); //5
+        barcode_key.add("4890008109234"); //6
+        barcode_key.add("4890008109159"); //7
+        barcode_key.add("4890008120291"); //8
+        barcode_key.add("4890008411238"); //9
+        barcode_key.add("4890008110155"); //10
+        barcode_key.add("4890008110230"); //11
+        barcode_key.add("3179730013158"); //12
+        barcode_key.add("3179730011154"); //13
 
-        product_name.add("葡萄適 Lucozade - Sport 運動飲料 - 橙味 - 樽裝 450毫升");
-        product_name.add("水動樂 Aquarius - 零系電解質補充飲品 - 樽裝 500毫升");
+        product_name.add("7 Up - 7 Up - Bottle 1.25L");                             //1
+        product_name.add("Coca Cola - Coke - Bottle 1.25L");                        //2
+        product_name.add("Coca Cola - Coke - Bottle 2L");                           //3
+        product_name.add("Coca Cola - Coke - Bottle 500mL");                        //4
+        product_name.add("Coca Cola - Coke Plus (Zero Sugar) - Bottle 500mL");      //5
+        product_name.add("Coca Cola - Coke Zero - Bottle 500mL");                   //6
+        product_name.add("Coca Cola - Coke Zero - Bottle 1.25L");                   //7
+        product_name.add("Fanta - Orange Drink - Bottle 2L");                       //8
+        product_name.add("Schweppes - +C Lemon Flavoured Soda - Bottle 500mL");     //9
+        product_name.add("Sprite - Lemon-Lime Flavoured Soda - Bottle 1.25L");      //10
+        product_name.add("Sprite - Lemon-Lime Flavoured Soda - Bottle 500mL");      //11
+        product_name.add("Perrier - Sparkling Mineral Water 330mL");                //12
+        product_name.add("Perrier - Sparkling Mineral Water 750mL");                //13
+
+        // I think no. of cubeOfsugar can use array to store it ? , and so the others ?
+        cubeOfsugar.add("24"); //1
+        cubeOfsugar.add("33"); //2
+        cubeOfsugar.add("53"); //3
+        cubeOfsugar.add("13"); //4
+        cubeOfsugar.add("0");  //5
+        cubeOfsugar.add("0");  //6
+        cubeOfsugar.add("0");  //7
+        cubeOfsugar.add("65"); //8
+        cubeOfsugar.add("9");  //9
+        cubeOfsugar.add("15"); //10
+        cubeOfsugar.add("6");  //11
+        cubeOfsugar.add("0");  //12
+        cubeOfsugar.add("0");  //13
+
+
 
         editor.putStringSet(barCodeKey,barcode_key);
         editor.putStringSet(ProductKey,product_name);
+        editor.putStringSet(cube_sugar,cubeOfsugar);
         editor.commit();
         editor.apply();
 
