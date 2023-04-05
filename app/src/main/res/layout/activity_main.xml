@@ -15,12 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="88dp">
 
-        <ImageView
-            android:id="@+id/sugar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/sugar" />
-
         <ImageButton
             android:id="@+id/setting_ib"
             android:layout_width="108dp"

@@ -27,6 +27,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,10 +60,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float xPosition, yPosition;
-    private ImageView sugar;
+
+    //init sugar needed
+    private ArrayList<ImageView> imageViews;
+    private RelativeLayout RL1;
+    private float[] lastAccelerometer = new float[3];
 
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
+
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
     TextView current_Date, standardValue, cubesOfSugar;
 
@@ -87,12 +93,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //sensing object , Do not change unless inneeded
-        sugar = findViewById(R.id.sugar);
+
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        xPosition = sugar.getX();
-        yPosition = sugar.getY();
+        //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+
 
     }
     public void init_object(){
@@ -108,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         standardValue = findViewById(R.id.standardValue);
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
+        // init relative layout
+        RL1 = findViewById(R.id.RL1);
+        imageViews = new ArrayList<>();
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -126,9 +134,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         editor.putStringSet(barCodeKey,barcode_key);
         editor.putStringSet(ProductKey,product_name);
+        editor.commit();
         editor.apply();
+
         // make a log
         Toast.makeText(getApplicationContext(), product_name.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
+
 
     }
 
@@ -201,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 while(i.hasNext()) {
                     if(result.getContents().equals(i.next())) {
                         builder.setMessage("get!\n" + "The barcode is " + result.getContents());
+                        addImageView(); // simple adding one sugar.
                         isSearched = true;
                     }
                 }
@@ -219,36 +231,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }});
 
 ///sugar moving AREA based on user phone
+private void addImageView() {
+    ImageView newImageView = new ImageView(this);
+    newImageView.setImageResource(R.drawable.sugar); // Replace 'your_image' with your image resource name
+    newImageView.setLayoutParams(new RelativeLayout.LayoutParams(100, 100));
+
+    // Set the initial position of the ImageView
+    // You can modify the values to adjust the initial position
+    newImageView.setX(50);
+    newImageView.setY(50);
+
+    imageViews.add(newImageView);
+    RL1.addView(newImageView);
+}
+@Override
+public void onSensorChanged(SensorEvent event) {
+    if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        lastAccelerometer = event.values.clone();
+        updateImageViewPositions();
+    }
+}
+
+    private void updateImageViewPositions() {
+        for (ImageView imageView : imageViews) {
+
+            // Update X and Y based on accelerometer values and your desired speed.
+            // In this example, we multiply the accelerometer values by 5 to speed up the movement.
+            float newX = imageView.getX() - lastAccelerometer[0] * 5;
+            float newY = imageView.getY() + lastAccelerometer[1] * 5;
+
+            // Make sure the ImageView stays within the screen bounds
+            newX = Math.max(newX, 0);
+            newX = Math.min(newX, RL1.getWidth() - imageView.getWidth());
+            newY = Math.max(newY, 0);
+            newY = Math.min(newY, RL1.getHeight() - imageView.getHeight());
+
+            if (!isCollidingWithOtherImageViews(imageView, (int) newX, (int) newY)) {
+                imageView.setX(newX);
+                imageView.setY(newY);
+            }
+
+        }
+    }
+    private boolean isCollidingWithOtherImageViews(ImageView currentImageView, int newX, int newY) {
+        Rect currentRect = new Rect(newX, newY,
+                newX + currentImageView.getWidth(), newY + currentImageView.getHeight());
+
+        for (ImageView imageView : imageViews) {
+            if (imageView != currentImageView) {
+                Rect otherRect = new Rect((int) imageView.getX(), (int) imageView.getY(),
+                        (int) imageView.getX() + imageView.getWidth(),
+                        (int) imageView.getY() + imageView.getHeight());
+
+                if (Rect.intersects(currentRect, otherRect)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        float x = event.values[0];
-        float y = event.values[1];
-
-
-        // calculate the new position of the ImageView based on accelerometer data : Warning , comment provided by GPT , please retype by own wording , adjust the calculation to run it smoothly
-        xPosition -= x * 5;
-        yPosition += y * 5;
-
-        // make sure the ImageView stays within the view border : Warning , comment provided by GPT , please retype by own wording
-        if (xPosition < 0) xPosition = 0;
-        if (yPosition < 0) yPosition = 0;
-        if(xPosition>getApplicationContext().getResources().getDisplayMetrics().widthPixels-sugar.getWidth()) xPosition = getApplicationContext().getResources().getDisplayMetrics().widthPixels - sugar.getWidth();
-        if(yPosition>getApplicationContext().getResources().getDisplayMetrics().heightPixels-sugar.getHeight()) yPosition = getApplicationContext().getResources().getDisplayMetrics().heightPixels  - sugar.getHeight();
-
-
-        // update the position of the ImageView on the screen : Warning , comment provided by GPT , please retype by own wording
-        sugar.setX(xPosition);
-        sugar.setY(yPosition);
-        // Set the new position and rotation of the ImageView : Warning , comment provided by GPT , please retype by own wording
-        sugar.setTranslationX(xPosition);
-        sugar.setTranslationY(yPosition);
-        //rotation of the sugar , configure it to run it smoothly
-        sugar.setRotation(-xPosition * 3.0f);
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do nothing in this example
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        //No action needed in this class
-    }
+
+
 
 }
