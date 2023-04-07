@@ -33,11 +33,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.Toast;
+
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.World;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
     /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
@@ -60,13 +68,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Sensor oject
     private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private float xPosition, yPosition;
+    private Sensor accelerometerSensor;
 
-    //init sugar needed
-    private ArrayList<ImageView> imageViews;
-    private RelativeLayout RL1;
-    private float[] lastAccelerometer = new float[3];
+    private RelativeLayout sugar_RL;
+    private List<ImageView> imageViews = new ArrayList<>();
+    private float[] lastAccelerometer;
+    private World world;
+
+
 
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
@@ -95,10 +104,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //sensing object , Do not change unless inneeded
-
+        initializeWorld();
+        sugar_RL = findViewById(R.id.sugar_RL);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+
+        //world
+        sugar_RL.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                sugar_RL.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int width = sugar_RL.getWidth();
+                int height = sugar_RL.getHeight();
+
+                createScreenBounds(width, height); // Now that the dimensions are known, create the screen bounds
+            }
+        });
 
 
     }
@@ -116,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
         // init relative layout
-        RL1 = findViewById(R.id.RL1);
+
         imageViews = new ArrayList<>();
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
@@ -186,17 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
 
-    }
 
     @Override
     public void onClick(View view) {
@@ -254,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 while(i.hasNext()) {
                     if(result.getContents().equals(i.next())) {
                         builder.setMessage("get!\n" + "The barcode is " + result.getContents());
-                        addImageView(); // simple adding one sugar.
+                        addNewImageView(); // simple adding one sugar.
                         isSearched = true;
                     }
                 }
@@ -273,70 +285,120 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }});
 
 ///sugar moving AREA based on user phone
-private void addImageView() {
-    ImageView newImageView = new ImageView(this);
-    newImageView.setImageResource(R.drawable.sugar); // Replace 'your_image' with your image resource name
-    newImageView.setLayoutParams(new RelativeLayout.LayoutParams(100, 100));
+private void addNewImageView() {
+    ImageView imageView = new ImageView(this);
+    imageView.setImageResource(R.drawable.sugar); // Replace with your image resource
 
-    // Set the initial position of the ImageView
-    // You can modify the values to adjust the initial position
-    newImageView.setX(50);
-    newImageView.setY(50);
+    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
+    layoutParams.leftMargin = 100; // Adjust the initial position as needed
+    layoutParams.topMargin = 100;
 
-    imageViews.add(newImageView);
-    RL1.addView(newImageView);
+    imageView.setLayoutParams(layoutParams);
+    sugar_RL.addView(imageView);
+
+    BodyDef bodyDef = new BodyDef();
+    bodyDef.type = BodyType.DYNAMIC;
+    bodyDef.position.set(layoutParams.leftMargin / 100.0f, layoutParams.topMargin / 100.0f); // Divide by 100 to convert pixels to meters
+
+    // Set allowSleep to false to prevent the body from going to sleep
+    bodyDef.allowSleep = false;
+
+    PolygonShape shape = new PolygonShape();
+    float halfWidth = layoutParams.width / 200.0f; // Divide by 200 since we need half-width and half-height
+    float halfHeight = layoutParams.height / 200.0f;
+    shape.setAsBox(halfWidth, halfHeight);
+
+    Body body = world.createBody(bodyDef);
+    body.createFixture(shape, 1.0f);
+    imageView.setTag(body); // Store the JBox2D body as a tag in the ImageView
+
+    imageViews.add(imageView);
 }
-@Override
-public void onSensorChanged(SensorEvent event) {
-    if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-        lastAccelerometer = event.values.clone();
-        updateImageViewPositions();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
-}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            lastAccelerometer = event.values.clone();
+            updateImageViewPositions();
+        }
+    }
 
     private void updateImageViewPositions() {
+        Vec2 gravity = new Vec2(-lastAccelerometer[0], lastAccelerometer[1]);
+        world.setGravity(gravity);
+
+        float timeStep = 1.0f / 60.0f;
+        int velocityIterations = 15;
+        int positionIterations = 8;
+
+        world.step(timeStep, velocityIterations, positionIterations);
+        updateImageViews();
+    }
+
+    private void updateImageViews() {
         for (ImageView imageView : imageViews) {
+            Body body = (Body) imageView.getTag();
+            Vec2 position = body.getPosition();
+            float angle = body.getAngle();
 
-            // Update X and Y based on accelerometer values and your desired speed.
-            // In this example, we multiply the accelerometer values by 5 to speed up the movement.
-            float newX = imageView.getX() - lastAccelerometer[0] * 5;
-            float newY = imageView.getY() + lastAccelerometer[1] * 5;
+            // Adjust the position accounting for the ImageView dimensions
+            float adjustedX = position.x * 100.0f - (imageView.getWidth() / 2.0f);
+            float adjustedY = position.y * 100.0f - (imageView.getHeight() / 2.0f);
 
-            // Make sure the ImageView stays within the screen bounds
-            newX = Math.max(newX, 0);
-            newX = Math.min(newX, RL1.getWidth() - imageView.getWidth());
-            newY = Math.max(newY, 0);
-            newY = Math.min(newY, RL1.getHeight() - imageView.getHeight());
-
-            if (!isCollidingWithOtherImageViews(imageView, (int) newX, (int) newY)) {
-                imageView.setX(newX);
-                imageView.setY(newY);
-            }
-
+            imageView.setX(adjustedX);
+            imageView.setY(adjustedY);
+            imageView.setRotation((float) Math.toDegrees(angle));
         }
     }
-    private boolean isCollidingWithOtherImageViews(ImageView currentImageView, int newX, int newY) {
-        Rect currentRect = new Rect(newX, newY,
-                newX + currentImageView.getWidth(), newY + currentImageView.getHeight());
 
-        for (ImageView imageView : imageViews) {
-            if (imageView != currentImageView) {
-                Rect otherRect = new Rect((int) imageView.getX(), (int) imageView.getY(),
-                        (int) imageView.getX() + imageView.getWidth(),
-                        (int) imageView.getY() + imageView.getHeight());
-
-                if (Rect.intersects(currentRect, otherRect)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing in this example
     }
+
+    private void createScreenBounds(int width, int height) {
+        float screenWidth = width / 100.0f;
+        float screenHeight = height / 100.0f;
+        float wallThickness = 0.1f;
+
+        createWall(new Vec2(screenWidth / 2, -wallThickness), screenWidth / 2, wallThickness); // Top
+        createWall(new Vec2(screenWidth / 2, screenHeight + wallThickness), screenWidth / 2, wallThickness); // Bottom
+        createWall(new Vec2(-wallThickness, screenHeight / 2), wallThickness, screenHeight / 2); // Left
+        createWall(new Vec2(screenWidth + wallThickness, screenHeight / 2), wallThickness, screenHeight / 2); // Right
+    }
+
+    private void createWall(Vec2 position, float halfWidth, float halfHeight) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.STATIC;
+        bodyDef.position.set(position);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(halfWidth, halfHeight);
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(shape, 0.0f);
+    }
+
+    private void initializeWorld() {
+        world = new World(new Vec2(0, -9.81f)); // Create a new world with gravity
+
+    }
+
+
+
+
 
 
 

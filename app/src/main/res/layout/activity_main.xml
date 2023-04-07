@@ -9,73 +9,77 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
-        android:id="@+id/RL1"
+        android:id="@+id/sugar_RL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="88dp">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/setting_ib"
-            android:layout_width="108dp"
-            android:layout_height="103dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="true"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/setting_ib" />
-
-        <TextView
-            android:id="@+id/current_Date"
+        <RelativeLayout
+            android:id="@+id/RL1"
             android:layout_width="match_parent"
-            android:layout_height="369dp"
-            android:gravity="center|center_horizontal"
-            android:text="Date"
-            android:textSize="34sp" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/cubesOfSugar"
-            android:layout_width="match_parent"
-            android:layout_height="688dp"
-            android:gravity="center"
-            android:text="@string/cubesOfSugar"
-            android:textColor="@color/black"
-            android:textSize="78sp" />
+            <ImageButton
+                android:id="@+id/setting_ib"
+                android:layout_width="108dp"
+                android:layout_height="103dp"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="true"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/setting_ib" />
 
-        <TextView
-            android:id="@+id/standardValue"
-            android:layout_width="match_parent"
-            android:layout_height="460dp"
-            android:gravity="bottom|center"
-            android:text="@string/standardValue"
-            android:textSize="34sp" />
+            <TextView
+                android:id="@+id/current_Date"
+                android:layout_width="match_parent"
+                android:layout_height="369dp"
+                android:gravity="center|center_horizontal"
+                android:text="Date"
+                android:textSize="34sp" />
 
-        <ImageButton
-            android:id="@+id/history_ib"
-            android:layout_width="108dp"
-            android:layout_height="103dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/history_ib" />
+            <TextView
+                android:id="@+id/cubesOfSugar"
+                android:layout_width="match_parent"
+                android:layout_height="688dp"
+                android:gravity="center"
+                android:text="@string/cubesOfSugar"
+                android:textColor="@color/black"
+                android:textSize="78sp" />
 
-        <ImageButton
-            android:id="@+id/qrscan_ib"
-            android:layout_width="108dp"
-            android:layout_height="103dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="100dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/addsign_ib" />
+            <TextView
+                android:id="@+id/standardValue"
+                android:layout_width="match_parent"
+                android:layout_height="460dp"
+                android:gravity="bottom|center"
+                android:text="@string/standardValue"
+                android:textSize="34sp" />
 
+            <ImageButton
+                android:id="@+id/history_ib"
+                android:layout_width="108dp"
+                android:layout_height="103dp"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/history_ib" />
+
+            <ImageButton
+                android:id="@+id/qrscan_ib"
+                android:layout_width="108dp"
+                android:layout_height="103dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="150dp"
+                android:layout_marginBottom="100dp"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/addsign_ib" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
