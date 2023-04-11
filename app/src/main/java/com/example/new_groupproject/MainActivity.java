@@ -1,13 +1,11 @@
 package com.example.new_groupproject;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.Dimension;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -28,7 +26,6 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -36,8 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import android.graphics.Rect;
-import android.util.AttributeSet;
 import android.widget.Toast;
 
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -70,12 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
 
-    private RelativeLayout sugar_RL;
+    private ConstraintLayout CL1;
     private List<ImageView> imageViews = new ArrayList<>();
     private float[] lastAccelerometer;
     private World world;
-
-
 
     // Object that needed for our app
     ImageButton ib_list[]=new ImageButton[3];
@@ -105,22 +98,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //sensing object , Do not change unless inneeded
         initializeWorld();
-        sugar_RL = findViewById(R.id.sugar_RL);
+        CL1 = findViewById(R.id.CL1);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 
         //world
-        sugar_RL.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        CL1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                sugar_RL.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int width = sugar_RL.getWidth();
-                int height = sugar_RL.getHeight();
+                CL1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int width = CL1.getWidth();
+                int height = CL1.getHeight();
 
                 createScreenBounds(width, height); // Now that the dimensions are known, create the screen bounds
             }
         });
+
 
 
     }
@@ -138,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
         // init relative layout
-
         imageViews = new ArrayList<>();
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
@@ -149,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         product_name= sharedPreferences.getStringSet(ProductKey,new HashSet<String >());
         cubeOfsugar = sharedPreferences.getStringSet(cube_sugar,new HashSet<String>());
         barcode_key = sharedPreferences.getStringSet(barCodeKey,new HashSet<String >());
+
         // add two data
         barcode_key.add("4891513000122"); //1
         barcode_key.add("4890008100156"); //2
@@ -193,8 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cubeOfsugar.add("0");  //12
         cubeOfsugar.add("0");  //13
 
-
-
         editor.putStringSet(barCodeKey,barcode_key);
         editor.putStringSet(ProductKey,product_name);
         editor.putStringSet(cube_sugar,cubeOfsugar);
@@ -204,11 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // make a log
         Toast.makeText(getApplicationContext(), product_name.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
 
-
     }
-
-
-
 
     @Override
     public void onClick(View view) {
@@ -238,7 +226,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(c);
     }
 
-
     //just some scanning codes,current gradle using below.
     //https://github.com/journeyapps/zxing-android-embedded
     private void scanCode(){
@@ -259,13 +246,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Iterator<String> i = barcode_key.iterator();
         if(result.getContents()!=null){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Result");
+            //builder.setTitle("Result");
         Boolean isSearched = false;
         //builder.setMessage(result.getContents());
             if (barcode_key != null) {
                 while(i.hasNext()) {
                     if(result.getContents().equals(i.next())) {
-                        builder.setMessage("get!\n" + "The barcode is " + result.getContents());
+                        //Intent intent = new Intent(this, saving.class);
+                        //startActivity(intent);
+                        //builder.setMessage("get!\n" + "The barcode is " + result.getContents());
                         addNewImageView(); // simple adding one sugar.
                         isSearched = true;
                     }
@@ -276,44 +265,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
-        }).show();
+        }).show();*/
     }});
 
+
 ///sugar moving AREA based on user phone
-private void addNewImageView() {
-    ImageView imageView = new ImageView(this);
-    imageView.setImageResource(R.drawable.sugar); // Replace with your image resource
 
-    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
-    layoutParams.leftMargin = 100; // Adjust the initial position as needed
-    layoutParams.topMargin = 100;
+    private void addNewImageView() {
+        ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.drawable.sugar); // Replace with your image resource
 
-    imageView.setLayoutParams(layoutParams);
-    sugar_RL.addView(imageView);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
+        layoutParams.leftMargin = 100; // Adjust the initial position as needed
+        layoutParams.topMargin = 100;
 
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.DYNAMIC;
-    bodyDef.position.set(layoutParams.leftMargin / 100.0f, layoutParams.topMargin / 100.0f); // Divide by 100 to convert pixels to meters
+        // Set layout rules for the new ImageView
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.button); // make the new ImageView appear below the button
+        layoutParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.button); // align the new ImageView with the left edge of the button
 
-    // Set allowSleep to false to prevent the body from going to sleep
-    bodyDef.allowSleep = false;
+        imageView.setLayoutParams(layoutParams);
+        CL1.addView(imageView, 0); // Add the new ImageView at index 0
 
-    PolygonShape shape = new PolygonShape();
-    float halfWidth = layoutParams.width / 200.0f; // Divide by 200 since we need half-width and half-height
-    float halfHeight = layoutParams.height / 200.0f;
-    shape.setAsBox(halfWidth, halfHeight);
+        // Create a JBox2D body for the new ImageView
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position.set(layoutParams.leftMargin / 100.0f, layoutParams.topMargin / 100.0f); // Divide by 100 to convert pixels to meters
 
-    Body body = world.createBody(bodyDef);
-    body.createFixture(shape, 1.0f);
-    imageView.setTag(body); // Store the JBox2D body as a tag in the ImageView
+        // Set allowSleep to false to prevent the body from going to sleep
+        bodyDef.allowSleep = false;
 
-    imageViews.add(imageView);
-}
+        PolygonShape shape = new PolygonShape();
+        float halfWidth = layoutParams.width / 200.0f; // Divide by 200 since we need half-width and half-height
+        float halfHeight = layoutParams.height / 200.0f;
+        shape.setAsBox(halfWidth, halfHeight);
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(shape, 1.0f);
+        imageView.setTag(body); // Store the JBox2D body as a tag in the ImageView
+
+        imageViews.add(imageView);
+    }
 
     @Override
     protected void onResume() {
@@ -353,7 +349,7 @@ private void addNewImageView() {
             Vec2 position = body.getPosition();
             float angle = body.getAngle();
 
-            // Adjust the position accounting for the ImageView dimensions
+            // Adjust the position accounting for the ImageView dimensions within the screen border
             float adjustedX = position.x * 100.0f - (imageView.getWidth() / 2.0f);
             float adjustedY = position.y * 100.0f - (imageView.getHeight() / 2.0f);
 
@@ -365,7 +361,7 @@ private void addNewImageView() {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Do nothing in this example
+        // Do nothing
     }
 
     private void createScreenBounds(int width, int height) {
@@ -393,14 +389,12 @@ private void addNewImageView() {
 
     private void initializeWorld() {
         world = new World(new Vec2(0, -9.81f)); // Create a new world with gravity
-
     }
 
 
 
-
-
-
-
+    public static MainActivity getInstance() {
+        return new MainActivity();
+    }
 
 }
