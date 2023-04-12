@@ -1,6 +1,7 @@
 package com.example.new_groupproject;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,9 +30,11 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import android.widget.Toast;
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
+    // perform the sugar operation
+
     public static final String productinfo ="Product_info";
     public static final String ProductKey = "product_nameKEY";
     public static final String gram_sugar = "sugarKEY";
@@ -59,8 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Set<String> barcode_key;
     //cube of sugar
     public Set<String> cubeOfsugar;
-
-
+    public String isSave;
+    public Integer targetSugar=0;
+    public HashMap<String, String> codeToProductName =new HashMap<>();
+    public HashMap<String, Integer> codeToSugar = new HashMap<>();
     //Sensor oject
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
@@ -84,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Hide the title bar from this page
         getSupportActionBar().hide();
+
 
         // init all the needed objects
         init_object();
@@ -117,8 +126,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
+    }
+    public void Generating_Sugars(Integer numOfSugar)
+    {
+        Log.d("Vincent", "Generating sugar!");
+        for(Integer i=0; i<numOfSugar; i++)
+            addNewImageView();
     }
     public void init_object(){
+
 
         // init image Button objects
         for(int i = 0 ; i<ib_id.length;i++){
@@ -139,62 +156,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //hard coding area of inputting the value into sharedpreference
         //please DELETE THE APP after adding new product items
-        product_name= sharedPreferences.getStringSet(ProductKey,new HashSet<String >());
-        cubeOfsugar = sharedPreferences.getStringSet(cube_sugar,new HashSet<String>());
-        barcode_key = sharedPreferences.getStringSet(barCodeKey,new HashSet<String >());
 
-        // add two data
-        barcode_key.add("4891513000122"); //1
-        barcode_key.add("4890008100156"); //2
-        barcode_key.add("4890008100293"); //3
-        barcode_key.add("4890008100231"); //4
-        barcode_key.add("4890008101238"); //5
-        barcode_key.add("4890008109234"); //6
-        barcode_key.add("4890008109159"); //7
-        barcode_key.add("4890008120291"); //8
-        barcode_key.add("4890008411238"); //9
-        barcode_key.add("4890008110155"); //10
-        barcode_key.add("4890008110230"); //11
-        barcode_key.add("3179730013158"); //12
-        barcode_key.add("3179730011154"); //13
+        // barcode maps to product name
+        codeToProductName.put("4891513000122", "7 Up - 7 Up - Bottle 1.25L");
+        codeToProductName.put("4890008100156", "Coca Cola - Coke - Bottle 1.25L");
+        codeToProductName.put("4890008100293", "Coca Cola - Coke - Bottle 2L");
+        codeToProductName.put("4890008100231", "Coca Cola - Coke - Bottle 500mL");
+        codeToProductName.put("4890008101238", "Coca Cola - Coke Plus (Zero Sugar) - Bottle 500mL");
+        codeToProductName.put("4890008109234", "Coca Cola - Coke Zero - Bottle 500mL");
+        codeToProductName.put("4890008109159", "Coca Cola - Coke Zero - Bottle 1.25L");
+        codeToProductName.put("4890008120291", "Fanta - Orange Drink - Bottle 2L");
+        codeToProductName.put("4890008411238", "Schweppes - +C Lemon Flavoured Soda - Bottle 500mL");
+        codeToProductName.put("4890008110155", "Sprite - Lemon-Lime Flavoured Soda - Bottle 1.25L");
+        codeToProductName.put("4890008110230", "Sprite - Lemon-Lime Flavoured Soda - Bottle 500mL");
+        codeToProductName.put("3179730013158", "Perrier - Sparkling Mineral Water 330mL");
+        codeToProductName.put("3179730011154", "Perrier - Sparkling Mineral Water 750mL");
 
-        product_name.add("7 Up - 7 Up - Bottle 1.25L");                             //1
-        product_name.add("Coca Cola - Coke - Bottle 1.25L");                        //2
-        product_name.add("Coca Cola - Coke - Bottle 2L");                           //3
-        product_name.add("Coca Cola - Coke - Bottle 500mL");                        //4
-        product_name.add("Coca Cola - Coke Plus (Zero Sugar) - Bottle 500mL");      //5
-        product_name.add("Coca Cola - Coke Zero - Bottle 500mL");                   //6
-        product_name.add("Coca Cola - Coke Zero - Bottle 1.25L");                   //7
-        product_name.add("Fanta - Orange Drink - Bottle 2L");                       //8
-        product_name.add("Schweppes - +C Lemon Flavoured Soda - Bottle 500mL");     //9
-        product_name.add("Sprite - Lemon-Lime Flavoured Soda - Bottle 1.25L");      //10
-        product_name.add("Sprite - Lemon-Lime Flavoured Soda - Bottle 500mL");      //11
-        product_name.add("Perrier - Sparkling Mineral Water 330mL");                //12
-        product_name.add("Perrier - Sparkling Mineral Water 750mL");                //13
+        // barcode maps to sugar
+        codeToSugar.put("4891513000122", 24);
+        codeToSugar.put("4890008100156", 33);
+        codeToSugar.put("4890008100293", 53);
+        codeToSugar.put("4890008100231", 13);
+        codeToSugar.put("4890008101238", 0);
+        codeToSugar.put("4890008109234", 0);
+        codeToSugar.put("4890008109159", 0);
+        codeToSugar.put("4890008120291", 65);
+        codeToSugar.put("4890008411238", 9);
+        codeToSugar.put("4890008110155", 15);
+        codeToSugar.put("4890008110230", 6);
+        codeToSugar.put("3179730013158", 0);
+        codeToSugar.put("3179730011154", 0);
 
-        // I think no. of cubeOfsugar can use array to store it ? , and so the others ?
-        cubeOfsugar.add("24"); //1
-        cubeOfsugar.add("33"); //2
-        cubeOfsugar.add("53"); //3
-        cubeOfsugar.add("13"); //4
-        cubeOfsugar.add("0");  //5
-        cubeOfsugar.add("0");  //6
-        cubeOfsugar.add("0");  //7
-        cubeOfsugar.add("65"); //8
-        cubeOfsugar.add("9");  //9
-        cubeOfsugar.add("15"); //10
-        cubeOfsugar.add("6");  //11
-        cubeOfsugar.add("0");  //12
-        cubeOfsugar.add("0");  //13
+        // iterate over the key-value pairs in the map and store them in SharedPreferences
+        for(Map.Entry<String, String> entry:  codeToProductName.entrySet())
+        {
+            String barCodeAsKey = entry.getKey();
+            String name = entry.getValue();
+            if(name instanceof String)
+            {
+                editor.putString(barCodeAsKey, name);
+            }
+        }
+        for(Map.Entry<String, Integer> entry:  codeToSugar.entrySet())
+        {
+            String barCodeAsKey = entry.getKey();
+            Integer sugar = entry.getValue();
+            if(sugar instanceof Integer)
+            {
+                editor.putInt(barCodeAsKey, sugar);
+            }
+        }
 
-        editor.putStringSet(barCodeKey,barcode_key);
-        editor.putStringSet(ProductKey,product_name);
-        editor.putStringSet(cube_sugar,cubeOfsugar);
         editor.commit();
         editor.apply();
 
         // make a log
-        Toast.makeText(getApplicationContext(), product_name.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), codeToProductName.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
 
     }
 
@@ -215,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StartNewActivity(class_array[i]);
             }
         }
+
         if(view.getId()==ib_id[2]){
             scanCode();
         }
@@ -236,34 +254,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         barLauncher.launch(options);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 999 && resultCode == saving.RESULT_OK) {
+            if (data != null) {
+                String result = data.getStringExtra("result");
+
+                if ("T".equals(result)) {
+                    // Generate sugar
+                    Generating_Sugars(targetSugar);
+                }
+            }
+        }
+    }
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
         //String barcodeval = (sharedPreferences.getString("CodeKeyKEY",""));
 
         //Trying to get the value search in the sharedpreferences
-        //Set<String> barcode_key = sharedPreferences.getStringSet("CodeKeyKEY",new HashSet<String >());
-        //String[] nbarcode_key = (new String[barcode_key.size()]);
-        Iterator<String> i = barcode_key.iterator();
-        if(result.getContents()!=null){
+
+        String targetCode = result.getContents();
+        Boolean isExisted = false;
+
+        if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
             //builder.setTitle("Result");
-        Boolean isSearched = false;
-        //builder.setMessage(result.getContents());
-            if (barcode_key != null) {
-                while(i.hasNext()) {
-                    if(result.getContents().equals(i.next())) {
-                        //Intent intent = new Intent(this, saving.class);
-                        //startActivity(intent);
-                        //builder.setMessage("get!\n" + "The barcode is " + result.getContents());
-                        addNewImageView(); // simple adding one sugar.
-                        isSearched = true;
-                    }
-                }
-                if(!isSearched)
-                {
-                    Log.d("Vincent", "The product is not searched!");
-                }
+
+            //builder.setMessage(result.getContents());
+            String Product = codeToProductName.get(targetCode);
+            Integer Sugar = codeToSugar.get(targetCode);
+            Toast.makeText(this, "The product name is " + Product + " and the sugar is " + Sugar , Toast.LENGTH_SHORT).show();
+            Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
+            isExisted = true;
+            targetSugar=Sugar;
+
+            if(!isExisted)
+            {
+                Log.d("Vincent", "The product is not searched!");
             }
+            else{
+                Log.d("Vincent", "The product is searched!");
+            }
+
+            Intent intent = new Intent(this, saving.class);
+            startActivityForResult(intent, 999);
+            //builder.setMessage("get!\n" + "The barcode is " + result.getContents());
+            // get the bool value from saving
+
+
+            //isSave = getIntent().getStringExtra("Saving");
+
+
+
+
+
 
         /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -271,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialogInterface.dismiss();
             }
         }).show();*/
-    }});
+        }});
 
 
 ///sugar moving AREA based on user phone
