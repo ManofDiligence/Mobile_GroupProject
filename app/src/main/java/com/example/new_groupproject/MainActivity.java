@@ -55,15 +55,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // perform the sugar operation
 
     public static final String productinfo ="Product_info";
-    public static final String ProductKey = "product_nameKEY";
-    public static final String gram_sugar = "sugarKEY";
-    public static final String cube_sugar = "cube_sugarKEY";
-    public static final String barCodeKey = "CodeKeyKEY";
 
-    public Integer targetSugar=0;
+    public String targetSugar;
+    public String targetBarcode="";
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
-    public HashMap<String, Integer> codeToSugar = new HashMap<>();
+    public HashMap<String, String> codeToSugar = new HashMap<>();
     //Sensor oject
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
@@ -123,11 +120,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-    public void Generating_Sugars(Integer numOfSugar)
+    public void Generating_Sugars(String numOfSugar)
     {
+        int n = Integer.parseInt(numOfSugar);
         Log.d("Vincent", numOfSugar + " Cubes of sugar");
-        for(Integer i=0; i<numOfSugar; i++)
+        for(int i=0; i<n; i++)
+        {
+            Log.d("Vincent", i+" sugars.");
             addNewImageView();
+        }
+
     }
     public void init_object(){
 
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
         // init relative layout
-        imageViews = new ArrayList<>();
+        //imageViews = new ArrayList<>();
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -168,19 +170,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         codeToProductName.put("3179730011154", "Perrier - Sparkling Mineral Water 750mL");
 
         // barcode maps to sugar
-        codeToSugar.put("4891513000122", 24);
-        codeToSugar.put("4890008100156", 33);
-        codeToSugar.put("4890008100293", 53);
-        codeToSugar.put("4890008100231", 13);
-        codeToSugar.put("4890008101238", 0);
-        codeToSugar.put("4890008109234", 0);
-        codeToSugar.put("4890008109159", 0);
-        codeToSugar.put("4890008120291", 65);
-        codeToSugar.put("4890008411238", 9);
-        codeToSugar.put("4890008110155", 15);
-        codeToSugar.put("4890008110230", 6);
-        codeToSugar.put("3179730013158", 0);
-        codeToSugar.put("3179730011154", 0);
+        codeToSugar.put("4891513000122", "24");
+        codeToSugar.put("4890008100156", "33");
+        codeToSugar.put("4890008100293", "53");
+        codeToSugar.put("4890008100231", "13");
+        codeToSugar.put("4890008101238", "0");
+        codeToSugar.put("4890008109234", "0");
+        codeToSugar.put("4890008109159", "0");
+        codeToSugar.put("4890008120291", "65");
+        codeToSugar.put("4890008411238", "9");
+        codeToSugar.put("4890008110155", "15");
+        codeToSugar.put("4890008110230", "6");
+        codeToSugar.put("3179730013158", "0");
+        codeToSugar.put("3179730011154", "0");
 
         // iterate over the key-value pairs in the map and store them in SharedPreferences
         for(Map.Entry<String, String> entry:  codeToProductName.entrySet())
@@ -192,13 +194,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString(barCodeAsKey, name);
             }
         }
-        for(Map.Entry<String, Integer> entry:  codeToSugar.entrySet())
+        for(Map.Entry<String, String> entry:  codeToSugar.entrySet())
         {
             String barCodeAsKey = entry.getKey();
-            Integer sugar = entry.getValue();
-            if(sugar instanceof Integer)
+            String sugar = entry.getValue();
+            if(sugar instanceof String)
             {
-                editor.putInt(barCodeAsKey, sugar);
+                editor.putString(barCodeAsKey, sugar);
             }
         }
 
@@ -262,6 +264,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // Generate sugar
                     Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
+                    // creating the string array to store the product information
+                    String []productData = new String[3];
+                    productData[0] = targetBarcode;
+                    productData[1] = codeToSugar.get(targetBarcode);
+                    productData[2] = codeToProductName.get(targetBarcode);
+                    // pass the intent to history class but not start the activity
+                    Intent newRecordData = new Intent(MainActivity.this, history_record.class);
+                    newRecordData.putExtra("ListOfValue", productData);
+                    // A instance of history record to call the setMyIntent method
+                    history_record recordClass = new history_record();
+                    recordClass.setMyIntent(newRecordData);
                 }
                 // when user click cancel -> nothing perform
                 else{
@@ -286,12 +299,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //builder.setMessage(result.getContents());
             String Product = codeToProductName.get(targetCode);
-            Integer Sugar = codeToSugar.get(targetCode);
+            String Sugar = codeToSugar.get(targetCode);
             Toast.makeText(this, "Product: "+Product + " Sugar: "+Sugar , Toast.LENGTH_SHORT).show();
             Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
             Log.d("Vincent", "Barcode is:  "+targetCode);
             isExisted = true;
             targetSugar=Sugar;
+            targetBarcode=targetCode;
 
             if(!isExisted)
             {
