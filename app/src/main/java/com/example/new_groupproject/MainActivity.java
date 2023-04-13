@@ -6,9 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.net.Inet4Address;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,8 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         // Hide the title bar from this page
-        getSupportActionBar().hide();
-
+        //getSupportActionBar().hide();
 
         // init all the needed objects
         init_object();
@@ -98,13 +100,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
         current_Date.setText(String.valueOf(format));
 
-
         //sensing object , Do not change unless inneeded
         initializeWorld();
         CL1 = findViewById(R.id.CL1);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+
+        //CL1 .setBackgroundColor(Color.parseColor("#FF00FF"));
 
         //world
         CL1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -117,9 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 createScreenBounds(width, height); // Now that the dimensions are known, create the screen bounds
             }
         });
-
-
-
 
     }
     public void Generating_Sugars(String numOfSugar)
@@ -228,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     //setting xml
                     case 1:
-                        StartNewActivity(class_array[i]);
+                        Intent intent =new Intent(MainActivity.this,setting_page.class);
+                        startActivityForResult(intent,1);
                         break;
 
                 }
@@ -258,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 999 && resultCode == saving.RESULT_OK) {
@@ -294,7 +295,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+        Log.d("main_activity", "Run any code in get color code ?");
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            String color = data.getStringExtra("color");
+            if (color != null) {
+            Log.d("main_activity", "get the color code of : " + color);
+            CL1.setBackgroundColor(Color.parseColor(color));}
+        }
     }
+
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
         //String barcodeval = (sharedPreferences.getString("CodeKeyKEY",""));
@@ -334,11 +343,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //isSave = getIntent().getStringExtra("Saving");
 
-
-
-
-
-
         /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -359,8 +363,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutParams.topMargin = 50;
 
         // Set layout rules for the new ImageView
-        layoutParams.addRule(RelativeLayout.BELOW, R.id.button); // make the new ImageView appear below the button
-        layoutParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.button); // align the new ImageView with the left edge of the button
+        //layoutParams.addRule(RelativeLayout.BELOW, R.id.button); // make the new ImageView appear below the button
+        //layoutParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.button); // align the new ImageView with the left edge of the button
 
         i.setLayoutParams(layoutParams);
         CL1.addView(i, 0); // Add the new ImageView at index 0
@@ -462,10 +466,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializeWorld() {
-        world = new World(new Vec2(0, -1000f)); // Create a new world with gravity
+        world = new World(new Vec2(0, -9.81f)); // Create a new world with gravity
     }
-
-
 
     public static MainActivity getInstance() {
         return new MainActivity();

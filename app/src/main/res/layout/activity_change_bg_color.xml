@@ -7,13 +7,27 @@
     android:background="@drawable/change_bg_color_theme"
     tools:context=".change_bg_color">
 
-    <TextView
-        android:id="@+id/changecolor_tv"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/changecolor_tv"
-        android:textSize="34sp" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="Back"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4" />
+    </LinearLayout>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -30,36 +44,45 @@
             android:weightSum="8">
 
             <Button
-                android:id="@+id/button10"
+                android:id="@+id/color_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_blue"
+                android:text="Blue" />
 
             <Button
-                android:id="@+id/button9"
+                android:id="@+id/color_blue2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_darkblue"
+                android:text="Blue2"
+                android:textColor="#FFFFFF" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/color_green"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_lightgreen"
+                android:text="Green" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/color_yellolime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_limegreen"
+                android:text="Green2" />
         </TableRow>
 
         <TableRow
@@ -69,36 +92,44 @@
             android:weightSum="8">
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/color_green3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_darkgreen"
+                android:text="Green3" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/color_green4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_green"
+                android:text="Green4" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/green_purple"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_purple"
+                android:text="Purple" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/color_pink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_pink"
+                android:text="Pink1" />
 
         </TableRow>
 
@@ -109,36 +140,44 @@
             android:weightSum="8">
 
             <Button
-                android:id="@+id/button14"
+                android:id="@+id/color_pink2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_dark_pink"
+                android:text="Pink2" />
 
             <Button
-                android:id="@+id/button13"
+                android:id="@+id/color_yellow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_yellow"
+                android:text="Yellow" />
 
             <Button
-                android:id="@+id/button12"
+                android:id="@+id/color_skin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_skincolor"
+                android:text="Skin" />
 
             <Button
-                android:id="@+id/button11"
+                android:id="@+id/color_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:text="Button" />
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/bg_default"
+                android:text="Default" />
 
         </TableRow>
     </TableLayout>

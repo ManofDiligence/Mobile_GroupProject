@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!--color to change the background-->
+    <color name="bg_blue">#91eaf2</color>
+    <color name="bg_purple">#a691f2</color>
+    <color name="bg_darkblue">#010575</color>
+    <color name="bg_lightgreen">#73d9a8</color>
+    <color name="bg_darkgreen">#117402</color>
+    <color name="bg_yellow">#e6e283</color>
+    <color name="bg_limegreen">#d9ff00</color>
+    <color name="bg_skincolor">#ffdcc4</color>
+    <color name="bg_default">#6c6c6c</color>
+    <color name="bg_green">#29d602</color>
+    <color name="bg_pink">#f26dad</color>
+    <color name="bg_dark_pink">#d40066</color>
 </resources>

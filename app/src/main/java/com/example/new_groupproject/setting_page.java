@@ -2,8 +2,10 @@ package com.example.new_groupproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,9 +40,29 @@ public class setting_page extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent c = new Intent(setting_page.this,classarray[i]);
-            startActivity(c);
+            startActivityForResult(c,1);
         }
     });
 
+
+
+
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            String color = data.getStringExtra("color");
+            Log.d("setting_page", "Get the color code of  "+color);
+            if (color != null) {
+                Intent intent = new Intent();
+                intent.putExtra("color", color);
+                setResult(MainActivity.RESULT_OK, intent);
+                Log.d("setting_page", "Passed  "+color +"to main_activity");
+
+            }
+        }
+    }
+
+
 }
