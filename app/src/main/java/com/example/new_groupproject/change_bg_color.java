@@ -19,6 +19,7 @@ public class change_bg_color extends AppCompatActivity implements View.OnClickLi
             R.id.color_default};
     TextView back_btn;
 
+    Intent resultIntent=new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +51,7 @@ public class change_bg_color extends AppCompatActivity implements View.OnClickLi
             if(view.getId()==button_int[i]){
                 switch (i){
                     case 0:
-                        Intent resultIntent = new Intent();
+
                         resultIntent.putExtra("color","#91eaf2");
                         setResult(Activity.RESULT_OK,resultIntent);
                         Log.d("color_chnges", "Color have been change to #91eaf2 " );
@@ -58,68 +59,67 @@ public class change_bg_color extends AppCompatActivity implements View.OnClickLi
                         break;
 
                     case 1:
-                        Intent resultIntent1 = new Intent();
-                        resultIntent1.putExtra("color","#010575");
-                        setResult(Activity.RESULT_OK,resultIntent1);
+
+                        resultIntent.putExtra("color","#010575");
+                        setResult(Activity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Intent resultIntent2 = new Intent();
-                        resultIntent2.putExtra("color","#73d9a8");
-                        setResult(Activity.RESULT_OK,resultIntent2);
+                        resultIntent.putExtra("color","#73d9a8");
+                        setResult(Activity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        Intent resultIntent3 = new Intent();
-                        resultIntent3.putExtra("color","#d9ff00");
-                        setResult(Activity.RESULT_OK,resultIntent3);
+
+                        resultIntent.putExtra("color","#d9ff00");
+                        setResult(Activity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                         case 4:
-                            Intent resultIntent4 = new Intent();
-                            resultIntent4.putExtra("color","#117402");
-                            setResult(Activity.RESULT_OK,resultIntent4);
+
+                            resultIntent.putExtra("color","#117402");
+                            setResult(Activity.RESULT_OK,resultIntent);
                             Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                             break;
                     case 5 :
-                        Intent resultIntent5 = new Intent();
-                        resultIntent5.putExtra("color","#29d602");
-                        setResult(Activity.RESULT_OK,resultIntent5);
+
+                        resultIntent.putExtra("color","#29d602");
+                        setResult(Activity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 6 :
-                        Intent resultIntent6 = new Intent();
-                        resultIntent6.putExtra("color","#a691f2");
-                        setResult(Activity.RESULT_OK,resultIntent6);
+
+                        resultIntent.putExtra("color","#a691f2");
+                        setResult(Activity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 7:
-                        Intent resultIntent7 = new Intent();
-                        resultIntent7.putExtra("color","#f26dad");
-                        setResult(MainActivity.RESULT_OK,resultIntent7);
+
+                        resultIntent.putExtra("color","#f26dad");
+                        setResult(MainActivity.RESULT_OK,resultIntent);
                         break;
                     case 8 :
-                        Intent resultIntent8 = new Intent();
-                        resultIntent8.putExtra("color","#d40066");
-                        setResult(MainActivity.RESULT_OK,resultIntent8);
+
+                        resultIntent.putExtra("color","#d40066");
+                        setResult(MainActivity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 9:
-                        Intent resultIntent9 = new Intent();
-                        resultIntent9.putExtra("color","#e6e283");
-                        setResult(MainActivity.RESULT_OK,resultIntent9);
+
+                        resultIntent.putExtra("color","#e6e283");
+                        setResult(MainActivity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 10:
-                        Intent resultIntent10 = new Intent();
-                        resultIntent10.putExtra("color","#ffdcc4");
-                        setResult(MainActivity.RESULT_OK,resultIntent10);
+
+                        resultIntent.putExtra("color","#ffdcc4");
+                        setResult(MainActivity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 11:
-                        Intent resultIntent11 = new Intent();
-                        resultIntent11.putExtra("color","#6c6c6c");
-                        setResult(MainActivity.RESULT_OK,resultIntent11);
+
+                        resultIntent.putExtra("color","#6c6c6c");
+                        setResult(MainActivity.RESULT_OK,resultIntent);
                         Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                 }
