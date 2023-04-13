@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String barCodeKey = "CodeKeyKEY";
 
     public Integer targetSugar=0;
+    // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, Integer> codeToSugar = new HashMap<>();
     //Sensor oject
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void Generating_Sugars(Integer numOfSugar)
     {
-        Log.d("Vincent", "Generating sugar!");
+        Log.d("Vincent", numOfSugar + " Cubes of sugar");
         for(Integer i=0; i<numOfSugar; i++)
             addNewImageView();
     }
@@ -254,14 +255,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == 999 && resultCode == saving.RESULT_OK) {
             if (data != null) {
+                // getting a boolean value from saving class
                 Boolean res = data.getBooleanExtra("result", false);
-
+                // when user click save
                 if (res) {
                     // Generate sugar
+                    Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
                 }
+                // when user click cancel -> nothing perform
                 else{
-
+                    Log.d("Vincent", "onActivityResult: Refresh");
+                    StartNewActivity(MainActivity.class);
                 }
             }
         }
@@ -282,8 +287,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //builder.setMessage(result.getContents());
             String Product = codeToProductName.get(targetCode);
             Integer Sugar = codeToSugar.get(targetCode);
-            Toast.makeText(this, "The product name is " + Product + " and the sugar is " + Sugar , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Product: "+Product + " Sugar: "+Sugar , Toast.LENGTH_SHORT).show();
             Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
+            Log.d("Vincent", "Barcode is:  "+targetCode);
             isExisted = true;
             targetSugar=Sugar;
 

@@ -15,7 +15,7 @@ import android.widget.ImageView;
 
 public class saving extends AppCompatActivity implements  View.OnClickListener{
     Button save_btn , cancel_btn;
-
+    Intent resultIntent = new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +47,16 @@ public class saving extends AppCompatActivity implements  View.OnClickListener{
                 // MainActivity mainActivity = (MainActivity) view.getContext();
                 // MainActivity.addNewImageView();
                 // }
-                Intent resultIntent = new Intent();
+
                 resultIntent.putExtra("result", true);
                 setResult(MainActivity.RESULT_OK, resultIntent);
                 finish();
                 break;
             case R.id.cancel_btn:
-                Intent cancel_intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(cancel_intent);
+
+                resultIntent.putExtra("result", false);
+                setResult(MainActivity.RESULT_OK, resultIntent);
+                finish();
                 Log.d("Cacnel", "Data not saved");
                 break;
 
