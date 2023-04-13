@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String productinfo ="Product_info";
 
+
     public String targetSugar;
     public String targetBarcode="";
     // perform a key-value mapping - easy for searching
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Sensor accelerometerSensor;
 
     private ConstraintLayout CL1;
-    private List<ImageView> imageViews = new ArrayList<>();
+    private List<ImageView> imageViews = new ArrayList<ImageView>();
     private float[] lastAccelerometer;
     private World world;
 
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void init_object(){
 
 
+
         // init image Button objects
         for(int i = 0 ; i<ib_id.length;i++){
             ib_list[i] = findViewById(ib_id[i]);
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cubesOfSugar = findViewById(R.id.cubesOfSugar);
 
         // init relative layout
-        //imageViews = new ArrayList<>();
+        imageViews = new ArrayList<>();
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -262,6 +264,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // when user click save
                 if (res) {
                     // Generate sugar
+                    double formulaForStandardValue = Double.parseDouble(targetSugar)*4.0/50.0;
+                    formulaForStandardValue*=100.0;
+                    standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
+                    cubesOfSugar.setText(targetSugar);
                     Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
                     // creating the string array to store the product information
@@ -340,19 +346,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 ///sugar moving AREA based on user phone
 
     private void addNewImageView() {
-        ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.drawable.sugar); // Replace with your image resource
+        ImageView i = new ImageView(this);
+        i.setImageResource(R.drawable.sugar); // Replace with your image resource
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
-        layoutParams.leftMargin = 100; // Adjust the initial position as needed
-        layoutParams.topMargin = 100;
+        layoutParams.leftMargin = 50; // Adjust the initial position as needed
+        layoutParams.topMargin = 50;
 
         // Set layout rules for the new ImageView
         layoutParams.addRule(RelativeLayout.BELOW, R.id.button); // make the new ImageView appear below the button
         layoutParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.button); // align the new ImageView with the left edge of the button
 
-        imageView.setLayoutParams(layoutParams);
-        CL1.addView(imageView, 0); // Add the new ImageView at index 0
+        i.setLayoutParams(layoutParams);
+        CL1.addView(i, 0); // Add the new ImageView at index 0
 
         // Create a JBox2D body for the new ImageView
         BodyDef bodyDef = new BodyDef();
@@ -369,9 +375,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Body body = world.createBody(bodyDef);
         body.createFixture(shape, 1.0f);
-        imageView.setTag(body); // Store the JBox2D body as a tag in the ImageView
+        i.setTag(body); // Store the JBox2D body as a tag in the ImageView
 
-        imageViews.add(imageView);
+        imageViews.add(i);
     }
 
     @Override
