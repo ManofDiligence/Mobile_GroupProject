@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String productinfo ="Product_info";
 
 
+    public history_record recordClass =new history_record();
     public String targetSugar;
     public String targetBarcode="";
     // perform a key-value mapping - easy for searching
@@ -134,13 +135,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void init_object(){
 
-
-
         // init image Button objects
         for(int i = 0 ; i<ib_id.length;i++){
             ib_list[i] = findViewById(ib_id[i]);
             ib_list[i].setOnClickListener(this);
         }
+
+        recordClass.setClass(null);
 
         // init TextView object
         current_Date = findViewById(R.id.current_Date);
@@ -222,13 +223,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (i) {
                     //history xml
                     case 0:
+                        if(recordClass.getClass()==null) StartNewActivity(history_record.class);
+                        else recordClass.startHistoryRecordActivity(); // start the history_record activity
                         break;
                     //setting xml
                     case 1:
+                        StartNewActivity(class_array[i]);
                         break;
 
                 }
-                StartNewActivity(class_array[i]);
+                //StartNewActivity(class_array[i]);
             }
         }
 
@@ -279,8 +283,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent newRecordData = new Intent(MainActivity.this, history_record.class);
                     newRecordData.putExtra("ListOfValue", productData);
                     // A instance of history record to call the setMyIntent method
-                    history_record recordClass = new history_record();
                     recordClass.setMyIntent(newRecordData);
+                    recordClass.setContext(MainActivity.this); // pass a reference to the MainActivity context
+                    recordClass.setClass(history_record.class);
                 }
                 // when user click cancel -> nothing perform
                 else{
@@ -457,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializeWorld() {
-        world = new World(new Vec2(0, -9.81f)); // Create a new world with gravity
+        world = new World(new Vec2(0, -1000f)); // Create a new world with gravity
     }
 
 
