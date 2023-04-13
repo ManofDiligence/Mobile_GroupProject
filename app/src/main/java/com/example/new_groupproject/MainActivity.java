@@ -59,13 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String gram_sugar = "sugarKEY";
     public static final String cube_sugar = "cube_sugarKEY";
     public static final String barCodeKey = "CodeKeyKEY";
-    //Product name data
-    public Set<String> product_name;
-    //Barcode data
-    public Set<String> barcode_key;
-    //cube of sugar
-    public Set<String> cubeOfsugar;
-    public String isSave;
+
     public Integer targetSugar=0;
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, Integer> codeToSugar = new HashMap<>();
@@ -260,11 +254,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == 999 && resultCode == saving.RESULT_OK) {
             if (data != null) {
-                String result = data.getStringExtra("result");
+                Boolean res = data.getBooleanExtra("result", false);
 
-                if ("T".equals(result)) {
+                if (res) {
                     // Generate sugar
                     Generating_Sugars(targetSugar);
+                }
+                else{
+
                 }
             }
         }

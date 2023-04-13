@@ -48,7 +48,7 @@ public class saving extends AppCompatActivity implements  View.OnClickListener{
                 // MainActivity.addNewImageView();
                 // }
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", "T");
+                resultIntent.putExtra("result", true);
                 setResult(MainActivity.RESULT_OK, resultIntent);
                 finish();
                 break;
