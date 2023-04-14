@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // when user click cancel -> nothing perform
                 else{
                     Log.d("Vincent", "onActivityResult: Refresh");
-                    StartNewActivity(MainActivity.class);
+                    //StartNewActivity(MainActivity.class);
                 }
             }
         }
@@ -413,9 +413,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Vec2 gravity = new Vec2(-lastAccelerometer[0], lastAccelerometer[1]);
         world.setGravity(gravity);
 
-        float timeStep = 1.0f / 60.0f;
-        int velocityIterations = 15;
-        int positionIterations = 8;
+        float timeStep = 1.0f / 20.0f;  // Decrease the timeStep to increase speed
+        int velocityIterations = 8;  // Decrease the iterations to increase speed
+        int positionIterations = 3;  // Decrease the iterations to increase speed
 
         world.step(timeStep, velocityIterations, positionIterations);
         updateImageViews();
