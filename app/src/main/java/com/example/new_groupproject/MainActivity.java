@@ -61,9 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public history_record recordClass =new history_record();
-    public String targetSugar="";
-    public String global_Sugar = "";
-    public String targetBarcode="";
+
+    public String targetSugar=""; // for storing the scanned sugar of product
+    public String global_Sugar = ""; // for updating the total scanned sugar of product
+    public String targetBarcode=""; // for storing the scanned barcode of product
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, String> codeToSugar = new HashMap<>();
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton ib_list[]=new ImageButton[3];
 
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
-    TextView current_Date, standardValue, cubesOfSugar;
+
+    TextView current_Date, standardValue, cubesOfSugar; // three text view for updating info in background
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,12 +278,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sharedPreferences = getSharedPreferences(productinfo, MODE_PRIVATE);
                     SharedPreferences.Editor e = sharedPreferences.edit();
                     // Generate sugar
+                    // the formula of Standard Value (1 cube = 4 gram)
+                    // sugar consumed per day is 50 gram
                     double formulaForStandardValue = Double.parseDouble(global_Sugar)*4.0/50.0;
                     formulaForStandardValue*=100.0;
+                    // updating the textview in the background
                     standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
                     cubesOfSugar.setText(global_Sugar);
                     Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
+                    // putting the barcode to the database
+                    // for history record to retrieve
                     e.putString("SavedKey", targetBarcode);
                     e.apply();
 
@@ -311,7 +318,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String targetCode = result.getContents();
         Boolean isExisted = false;
 
-
+        // check if the database contains this barcode
+        // if found -> performing the sugar adding
         if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
             //builder.setTitle("Result");
@@ -323,20 +331,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
             Log.d("Vincent", "Barcode is:  "+targetCode);
             isExisted = true;
-            // first add
+            targetSugar=Sugar;
+            // first time add sugar
             if(global_Sugar=="") {
-                targetSugar=Sugar;
                 global_Sugar=targetSugar;
             }
-
+            // if already have some sugar in main activity
             else {
                 int a = Integer.parseInt(Sugar);
                 int b = Integer.parseInt(global_Sugar);
-                targetSugar=Sugar;
                 global_Sugar = String.valueOf(a + b);
             }
-
-
 
             targetBarcode=targetCode;
 
@@ -362,11 +367,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialogInterface.dismiss();
             }
         }).show();*/
-        }});
+        }
+        // if the barcode is not found
+        else{
+            AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("The product seems new...\n Do you want to help us to insert into our app?");
+        }
+    });
 
 
 ///sugar moving AREA based on user phone
 
+    // creating a sugar in the main activity page
     private void addNewImageView() {
         ImageView i = new ImageView(this);
         i.setImageResource(R.drawable.sugar); // Replace with your image resource
