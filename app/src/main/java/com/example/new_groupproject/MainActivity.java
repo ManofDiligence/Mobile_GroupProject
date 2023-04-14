@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public history_record recordClass =new history_record();
     public String targetSugar="";
+    public String global_Sugar = "";
     public String targetBarcode="";
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ib_list[i].setOnClickListener(this);
         }
 
-        recordClass.setClass(null);
+
 
         // init TextView object
         current_Date = findViewById(R.id.current_Date);
@@ -223,8 +224,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (i) {
                     //history xml
                     case 0:
+                        /*
                         if(recordClass.getClass()==null) StartNewActivity(history_record.class);
                         else recordClass.startHistoryRecordActivity(); // start the history_record activity
+                        */
+                        StartNewActivity(class_array[i]);
+
                         break;
                     //setting xml
                     case 1:
@@ -268,25 +273,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Boolean res = data.getBooleanExtra("result", false);
                 // when user click save
                 if (res) {
+                    sharedPreferences = getSharedPreferences(productinfo, MODE_PRIVATE);
+                    SharedPreferences.Editor e = sharedPreferences.edit();
                     // Generate sugar
-                    double formulaForStandardValue = Double.parseDouble(targetSugar)*4.0/50.0;
+                    double formulaForStandardValue = Double.parseDouble(global_Sugar)*4.0/50.0;
                     formulaForStandardValue*=100.0;
                     standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
-                    cubesOfSugar.setText(targetSugar);
+                    cubesOfSugar.setText(global_Sugar);
                     Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
-                    // creating the string array to store the product information
-                    String []productData = new String[3];
-                    productData[0] = targetBarcode;
-                    productData[1] = codeToSugar.get(targetBarcode);
-                    productData[2] = codeToProductName.get(targetBarcode);
-                    // pass the intent to history class but not start the activity
-                    Intent newRecordData = new Intent(MainActivity.this, history_record.class);
-                    newRecordData.putExtra("ListOfValue", productData);
-                    // A instance of history record to call the setMyIntent method
-                    recordClass.setMyIntent(newRecordData);
-                    recordClass.setContext(MainActivity.this); // pass a reference to the MainActivity context
-                    recordClass.setClass(history_record.class);
+                    e.putString("SavedKey", targetBarcode);
+                    e.apply();
+
                 }
                 // when user click cancel -> nothing perform
                 else{
@@ -313,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String targetCode = result.getContents();
         Boolean isExisted = false;
 
+
         if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
             AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
             //builder.setTitle("Result");
@@ -324,15 +323,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
             Log.d("Vincent", "Barcode is:  "+targetCode);
             isExisted = true;
-            if(targetSugar=="")
-            {
+            // first add
+            if(global_Sugar=="") {
                 targetSugar=Sugar;
+                global_Sugar=targetSugar;
             }
-            else{
+
+            else {
                 int a = Integer.parseInt(Sugar);
-                int b = Integer.parseInt(targetSugar);
-                targetSugar=String.valueOf(a+b);
+                int b = Integer.parseInt(global_Sugar);
+                targetSugar=Sugar;
+                global_Sugar = String.valueOf(a + b);
             }
+
 
 
             targetBarcode=targetCode;
