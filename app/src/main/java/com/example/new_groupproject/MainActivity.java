@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public history_record recordClass =new history_record();
-    public String targetSugar;
+    public String targetSugar="";
     public String targetBarcode="";
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
@@ -324,7 +324,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("Vincent", "The product name is " + Product + " and the sugar is " + Sugar );
             Log.d("Vincent", "Barcode is:  "+targetCode);
             isExisted = true;
-            targetSugar=Sugar;
+            if(targetSugar=="")
+            {
+                targetSugar=Sugar;
+            }
+            else{
+                int a = Integer.parseInt(Sugar);
+                int b = Integer.parseInt(targetSugar);
+                targetSugar=String.valueOf(a+b);
+            }
+
+
             targetBarcode=targetCode;
 
             if(!isExisted)
