@@ -23,6 +23,7 @@ public class about_us extends AppCompatActivity {
         about_title.setOnTouchListener(onTouchListener);
 
         // Add more TextView elements and apply onTouchListener to them as needed
+        //pull again
     }
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {

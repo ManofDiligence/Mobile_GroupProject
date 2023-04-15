@@ -14,4 +14,5 @@
         android:layout_height="wrap_content"
         android:text="ABOUT_US"
         android:textSize="34sp" />
+    <!--random-->
 </androidx.constraintlayout.widget.ConstraintLayout>
