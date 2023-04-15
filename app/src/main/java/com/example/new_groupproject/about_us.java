@@ -19,28 +19,37 @@ public class about_us extends AppCompatActivity {
 
         about_title = findViewById(R.id.about_title);
 
-        about_title.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        dX = v.getX() - event.getRawX();
-                        dY = v.getY() - event.getRawY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        v.animate()
-                                .x(event.getRawX() + dX)
-                                .y(event.getRawY() + dY)
-                                .setDuration(0)
-                                .start();
-                        break;
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
+        // Apply onTouchListener to about_title TextView
+        about_title.setOnTouchListener(onTouchListener);
+
+        // Add more TextView elements and apply onTouchListener to them as needed
     }
+
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    dX = v.getX() - event.getRawX();
+                    dY = v.getY() - event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    v.animate()
+                            .x(event.getRawX() + dX)
+                            .y(event.getRawY() + dY)
+                            .setDuration(0)
+                            .start();
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+    };
+
+
 
 
 }
+
+

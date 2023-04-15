@@ -1,102 +1,63 @@
 package com.example.new_groupproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class history_record extends AppCompatActivity {
 
     public ListView listRecords;
-    public Layout LL1;
-    private Intent myIntent;
-    SharedPreferences sharedPreferences;
-    private Class Curc;
-    private Context context;
-    public String []SavedProduct = new String[3];
-
-    private ArrayList<String> recordArrayList = new ArrayList<String>();
-
     private ArrayAdapter<String> adapter;
+
+    private ArrayList<String> dataList;
+    private static final String DATA_LIST = "data_list";
+    private static final String SHARED_PREFS = "shared_prefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_record);
-        // since array can contain duplicate data
-        // we will use a array to store user's records
-        // convert it to arraylist
-
-        sharedPreferences = getSharedPreferences("Product_info", MODE_PRIVATE);
-        String newRecord = sharedPreferences.getString("SavedKey", "");
 
         listRecords = findViewById(R.id.listRecords);
-        // get the saved data from MainActivity
-        /*
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null)
-        {
-            SavedProduct=extras.getStringArray("ListOfValue");
-        }
-        */
-        // create a new list
-        ArrayList<String> newList = new ArrayList<>();
+        dataList = new ArrayList<>();
 
-        newList.add(newRecord);
-        /*
-        // add all the existing records
-        newList.addAll(recordArrayList);
-        for(int i=0; i<SavedProduct.length; i++)
-            newList.add(SavedProduct[i]);
-        */
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
-                this,
-                R.layout.activity_history_record,
-                R.id.records,
-                newList
-        );
-
-        // updating
-        recordArrayList.addAll(newList);
-        adapter = adapter1;
+        // Use android.R.layout.simple_list_item_1 instead of dataList
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
         listRecords.setAdapter(adapter);
 
-        // updating the array adapter after inserting
+        updateDataListFromSharedPreferences();
+
+        // Removed unnecessary newList and adapter1
+
+        // Updating the array adapter after inserting
         adapter.notifyDataSetChanged();
 
         Log.d("Vincent", "***History record*** ");
-        for(String element: recordArrayList)
-        {
+        for (String element : dataList) {
             Log.d("Vincent", element);
-
-        }
-
-
-
-    }
-
-    public void setMyIntent(Intent newRecordData) {
-        myIntent = newRecordData;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public void startHistoryRecordActivity() {
-        if (context != null && myIntent != null) {
-            context.startActivity(myIntent); // start the activity using the context reference
         }
     }
 
-    public void setClass(Class c) {
-        Curc = c;
+    private void updateDataListFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(DATA_LIST, null);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        List<String> dataListFromPrefs = gson.fromJson(json, type);
+
+        if (dataListFromPrefs != null) {
+            dataList.clear();
+            dataList.addAll(dataListFromPrefs);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

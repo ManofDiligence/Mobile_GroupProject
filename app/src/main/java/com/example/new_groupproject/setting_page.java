@@ -25,7 +25,7 @@ public class setting_page extends AppCompatActivity {
         // add title for this page
         setTitle("Settings");
         lv_setting = findViewById(R.id.lv_setting);
-        ArrayAdapter<String> setting_array_list =
+        ArrayAdapter<String>  setting_array_list=
                 new ArrayAdapter<String>(
                 this,
                 R.layout.activity_setting_page,

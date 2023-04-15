@@ -49,6 +49,11 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
     /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
@@ -63,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public history_record recordClass =new history_record();
 
+    private static final String DATA_LIST = "data_list";
+    private static final String SHARED_PREFS = "shared_prefs";
     public String targetSugar=""; // for storing the scanned sugar of product
     public String global_Sugar = ""; // for updating the total scanned sugar of product
     public String targetBarcode=""; // for storing the scanned barcode of product
@@ -300,8 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Boolean res = data.getBooleanExtra("result", false);
                 // when user click save
                 if (res) {
-                    sharedPreferences = getSharedPreferences(productinfo, MODE_PRIVATE);
-                    SharedPreferences.Editor e = sharedPreferences.edit();
+
                     // Generate sugar
                     // the formula of Standard Value (1 cube = 4 gram)
                     // sugar consumed per day is 50 gram
@@ -314,8 +320,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Generating_Sugars(targetSugar);
                     // putting the barcode to the database
                     // for history record to retrieve
-                    e.putString("SavedKey", targetBarcode);
-                    e.apply();
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    Gson gson = new Gson();
+                    String json = sharedPreferences.getString(DATA_LIST, null);
+                    Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                    List<String> dataList = gson.fromJson(json, type);
+
+                    if (dataList == null) {
+                        dataList = new ArrayList<>();
+                    }
+
+                    dataList.add(targetBarcode);
+
+                    json = gson.toJson(dataList);
+                    editor.putString(DATA_LIST, json);
+                    editor.apply();
+
 
                     if(formulaForStandardValue>100){
                         // Show the alert with the current message
