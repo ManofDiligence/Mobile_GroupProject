@@ -384,8 +384,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 Log.d("Vincent", "The product is searched!");
             }
-
+            String []arr = new String[2];
+            arr[0] = Product;
+            arr[1] = Sugar;
             Intent intent = new Intent(this, saving.class);
+            intent.putExtra("target", arr);
             startActivityForResult(intent, 999);
             //builder.setMessage("get!\n" + "The barcode is " + result.getContents());
             // get the bool value from saving
@@ -422,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageView i = new ImageView(this);
         i.setImageResource(R.drawable.sugar); // Replace with your image resource
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(160, 160); // Adjust width and height as needed
         layoutParams.leftMargin = 50; // Adjust the initial position as needed
         layoutParams.topMargin = 50;
 
@@ -478,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Vec2 gravity = new Vec2(-lastAccelerometer[0], lastAccelerometer[1]);
         world.setGravity(gravity);
 
-        float timeStep = 1.0f / 20.0f;  // Decrease the timeStep to increase speed
+        float timeStep = 1.0f / 10.0f;  // Decrease the timeStep to increase speed
         int velocityIterations = 8;  // Decrease the iterations to increase speed
         int positionIterations = 3;  // Decrease the iterations to increase speed
 

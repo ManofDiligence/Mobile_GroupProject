@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
+import android.widget.TextView;
 
 
 public class saving extends AppCompatActivity implements  View.OnClickListener{
     Button save_btn , cancel_btn;
+    TextView productName, sugarText;
     Intent resultIntent = new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,16 @@ public class saving extends AppCompatActivity implements  View.OnClickListener{
         transparentView.setAlpha(0.5f);
 
         init_object();
+        String []arr = new String[2];
+        Bundle extras = getIntent().getExtras();
+
+        if(extras!=null)
+        {
+            arr = extras.getStringArray("target");
+        }
+
+        productName.setText(arr[0]);
+        sugarText.setText(arr[1]+" cubes of sugar.");
 
     }
 
@@ -34,6 +45,8 @@ public class saving extends AppCompatActivity implements  View.OnClickListener{
         cancel_btn = findViewById(R.id.cancel_btn);
         save_btn.setOnClickListener(this);
         cancel_btn.setOnClickListener(this);
+        productName = findViewById(R.id.productName);
+        sugarText = findViewById(R.id.sugarText);
     }
 
 
