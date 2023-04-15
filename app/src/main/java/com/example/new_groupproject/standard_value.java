@@ -42,7 +42,7 @@ public class standard_value extends AppCompatActivity implements View.OnClickLis
         // Create a handler to run the color change and rotation tasks
         // Rotate the button with ObjectAnimator
         ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(my_button, "rotation", 0, 360);
-        rotateAnimator.setDuration(5000); // Rotate in 3 seconds
+        rotateAnimator.setDuration(3); // Rotate in 3 seconds
         rotateAnimator.setInterpolator(new LinearInterpolator());
         rotateAnimator.setRepeatCount(ObjectAnimator.INFINITE); // Rotate continuously
         rotateAnimator.start();
