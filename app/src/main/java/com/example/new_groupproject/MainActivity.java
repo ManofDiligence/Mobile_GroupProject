@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dataList = new ArrayList<>();
                     }
 
-                    dataList.add(targetBarcode);
+                    dataList.add(codeToProductName.get(targetBarcode)+"  Cubes of sugar: "+codeToSugar.get(targetBarcode));
 
                     json = gson.toJson(dataList);
                     editor.putString(DATA_LIST, json);
