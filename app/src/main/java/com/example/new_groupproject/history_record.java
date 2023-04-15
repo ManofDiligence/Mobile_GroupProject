@@ -35,7 +35,7 @@ public class history_record extends AppCompatActivity {
         // convert it to arraylist
 
         sharedPreferences = getSharedPreferences("Product_info", MODE_PRIVATE);
-        String newRecord = sharedPreferences.getString("SavedKey", "default");
+        String newRecord = sharedPreferences.getString("SavedKey", "");
 
         listRecords = findViewById(R.id.listRecords);
         // get the saved data from MainActivity
