@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public String targetSugar=""; // for storing the scanned sugar of product
     public String global_Sugar = ""; // for updating the total scanned sugar of product
     public String targetBarcode=""; // for storing the scanned barcode of product
+
+
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, String> codeToSugar = new HashMap<>();
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
 
     TextView current_Date, standardValue, cubesOfSugar; // three text view for updating info in background
+
+    double formulaForStandardValue = Double.parseDouble(global_Sugar)*4.0/50.0;
 
     //healthy message
     private String[] messages_too_many_sugar = {
@@ -112,9 +116,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Hide the title bar from this page
         //getSupportActionBar().hide();
-
         // init all the needed objects
         init_object();
+        String saved_sugar = sharedPreferences.getString("record_key", global_Sugar);
+        if(new Integer(saved_sugar)!=0){
+            for(int i = 0; i < new Integer(saved_sugar); i++){
+                addNewImageView();
+            }
+            standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
+            cubesOfSugar.setText(global_Sugar);
+
+        }
 
         // Add date and time in the background
         Date currentTime = Calendar.getInstance().getTime();
@@ -177,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //set shared preferences file and made
         sharedPreferences = getSharedPreferences(productinfo, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("record_key",global_Sugar);
+
+
 
         //hard coding area of inputting the value into sharedpreference
         //please DELETE THE APP after adding new product items
@@ -311,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // Generate sugar
                     // the formula of Standard Value (1 cube = 4 gram)
                     // sugar consumed per day is 50 gram
-                    double formulaForStandardValue = Double.parseDouble(global_Sugar)*4.0/50.0;
+
                     formulaForStandardValue*=100.0;
                     // updating the textview in the background
                     standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
@@ -489,6 +505,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         sensorManager.unregisterListener(this);
     }
+
 
 
     @Override
