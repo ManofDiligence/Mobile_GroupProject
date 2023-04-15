@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, String> codeToSugar = new HashMap<>();
-    //Sensor oject
+    //Sensor object
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
 
@@ -83,6 +84,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
 
     TextView current_Date, standardValue, cubesOfSugar; // three text view for updating info in background
+
+    //healthy message
+    private String[] messages_too_many_sugar = {
+            "sims like you just intake too many sugar today",
+            "Maybe water is your best friend than sugar contained drinks",
+            "A sugar away, Healthy on each day",
+            "NO MORE ᕙ(`▽´)ᕗ SUGAR "
+            // Add more messages as needed
+    };
+
+
+    private int messageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 
         //CL1 .setBackgroundColor(Color.parseColor("#FF00FF"));
+
 
         //world
         CL1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -264,6 +278,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         options.setCaptureActivity(scanning_barcode.class);
         barLauncher.launch(options);
     }
+    private void showAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Do any additional actions if needed
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -291,6 +316,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // for history record to retrieve
                     e.putString("SavedKey", targetBarcode);
                     e.apply();
+
+                    if(formulaForStandardValue>100){
+                        // Show the alert with the current message
+                        showAlert(messages_too_many_sugar[messageIndex]);
+                        // Increment the message index and reset it if it exceeds the array size
+                        messageIndex = (messageIndex + 1) % messages_too_many_sugar.length;
+                    }
 
                 }
                 // when user click cancel -> nothing perform
@@ -321,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check if the database contains this barcode
         // if found -> performing the sugar adding
         if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
-            AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
+
             //builder.setTitle("Result");
 
             //builder.setMessage(result.getContents());
@@ -370,8 +402,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         // if the barcode is not found
         else{
-            AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("The product seems new...\n Do you want to help us to insert into our app?");
+            AlertDialog.Builder builder= new AlertDialog.Builder(this);
+            builder.setMessage("The product seems new...\n Look forward on later update")
+            .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // Do any additional actions if needed
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     });
 
@@ -425,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         sensorManager.unregisterListener(this);
     }
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {

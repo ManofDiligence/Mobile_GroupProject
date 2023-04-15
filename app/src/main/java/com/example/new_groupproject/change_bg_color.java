@@ -97,6 +97,7 @@ public class change_bg_color extends AppCompatActivity implements View.OnClickLi
 
                         resultIntent.putExtra("color","#f26dad");
                         setResult(MainActivity.RESULT_OK,resultIntent);
+                        Toast.makeText(this, "Color changed!", Toast.LENGTH_SHORT).show();
                         break;
                     case 8 :
 

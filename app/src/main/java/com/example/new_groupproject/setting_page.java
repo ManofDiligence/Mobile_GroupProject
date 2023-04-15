@@ -14,8 +14,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class setting_page extends AppCompatActivity {
-    Class classarray[]={about_us.class,standard_value.class,change_bg_color.class};
-    String setting_array[]={"about us","About standard value","Change background color"};
+    Class classarray[]={about_us.class,standard_value.class,change_bg_color.class,meme.class};
+    String setting_array[]={"about us","About standard value","Change background color"
+            ,"Secret page makes you happy"};
     ListView lv_setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
