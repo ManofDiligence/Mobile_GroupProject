@@ -11,12 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class setting_page extends AppCompatActivity {
-    Class classarray[]={about_us.class,standard_value.class,change_bg_color.class,meme.class};
+    Class classarray[]={about_us.class,standard_value.class,change_bg_color.class, weight_record.class};
     String setting_array[]={"about us","About standard value","Change background color"
-            ,"Secret page makes you happy"};
+            ,"Weight_record"};
     ListView lv_setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

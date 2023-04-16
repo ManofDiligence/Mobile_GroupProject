@@ -124,8 +124,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Add more messages as needed
     };
 
+    private  String[] everyday_information = {
+            "health tips 1",
+            "health tips 2"
+    };
+
 
     private int messageIndex = 0;
+    private int messageIndex2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +171,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editor.clear();
             editor.putInt("last_cleared_day_of_year", currentDayOfYear);
             editor.apply();
+
+
+            // Show the alert with the current message
+            showAlert(everyday_information[messageIndex2]);
+            // Increment the message index and reset it if it exceeds the array size
+            messageIndex2 = (messageIndex2 + 1) % everyday_information.length;
+
         }
+
         //init of the another today sugar saving
         cubesOfSugar.setText(todaysugar_preferences.getString( no_sugar,""));
         standardValue.setText(todaysugar_preferences.getString(percent_value,"")+"% of standard value");
@@ -509,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 Log.d("Vincent", "The product is searched!");
             }
+
             String []arr = new String[2];
             arr[0] = Product;
             arr[1] = Sugar;
@@ -607,8 +622,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         world.setGravity(gravity);
 
         float timeStep = 1.0f / 10.0f;  // Decrease the timeStep to increase speed
-        int velocityIterations = 8;  // Decrease the iterations to increase speed
-        int positionIterations = 3;  // Decrease the iterations to increase speed
+        int velocityIterations = 8;  //Hiher the number will be more relastic
+        int positionIterations = 3;  // but it will use more user resources
 
         world.step(timeStep, velocityIterations, positionIterations);
         updateImageViews();
