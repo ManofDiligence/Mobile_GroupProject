@@ -31,6 +31,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.net.Inet4Address;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +55,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
     /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
@@ -332,8 +334,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (dataList == null) {
                         dataList = new ArrayList<>();
                     }
+                    TimeZone t = TimeZone.getTimeZone("Asia/Hong_Kong") ;
+                    Calendar c = Calendar.getInstance(t);
+                    // get the current time in milliseconds
+                    long currentTimeMillis = c.getTimeInMillis();
 
-                    dataList.add(codeToProductName.get(targetBarcode)+"  Cubes of sugar: "+codeToSugar.get(targetBarcode));
+// create a date object with the current time
+                    Date currentTime = new Date(currentTimeMillis);
+
+// create a date format for displaying the time
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+// set the time zone of the date format to the current time zone
+                    dateFormat.setTimeZone(t);
+
+// format the current time as a string
+                    String currentTimeString = dateFormat.format(currentTime);
+
+                    // update time and pass it
+
+                    //current_Date.setText(time);
+
+                    dataList.add(codeToProductName.get(targetBarcode)+"  Cubes of sugar: "+codeToSugar.get(targetBarcode)+ currentTimeString+"  " +t.getDisplayName());
 
                     json = gson.toJson(dataList);
                     editor.putString(DATA_LIST, json);
