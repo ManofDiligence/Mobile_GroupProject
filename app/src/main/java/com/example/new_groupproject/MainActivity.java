@@ -17,7 +17,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -64,13 +67,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //pull again
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
+    SharedPreferences todaysugar_preferences;
     // perform the sugar operation
 
     public static final String productinfo ="Product_info";
 
 
     public history_record recordClass =new history_record();
-
+    //////////////////////////////////////////////////////////////////////////////////////
+    /** main shared prefernece **/
     private static final String DATA_LIST = "data_list";
     private static final String SHARED_PREFS = "shared_prefs";
     public String targetSugar=""; // for storing the scanned sugar of product
@@ -79,6 +84,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // perform a key-value mapping - easy for searching
     public HashMap<String, String> codeToProductName =new HashMap<>();
     public HashMap<String, String> codeToSugar = new HashMap<>();
+    /////////////////////////////////////////////////////////////////////////////////////
+    /**today sugar value**/
+    public static final  String todaysug = "today_sugar";
+    public static final String no_sugar = "sugarKey";
+    public static final String percent_value = "percent_valueKey";
+
+    Calendar calendar = Calendar.getInstance();
+    //int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+
+    double today_sum_SD = 0;
+
+
+    private boolean hasAppBuilt = false;
+
+    /////////////////////////////////////////////////////////////////////////////////////
     //Sensor object
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
@@ -122,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Add date and time in the background
         Date currentTime = Calendar.getInstance().getTime();
 
+
+
         // set the format of time
         String format = DateFormat.getDateInstance(DateFormat.DEFAULT).format(currentTime);
         current_Date.setText(String.valueOf(format));
@@ -132,8 +154,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+        //////////////////////////////
+        /** today shared preference **/
+        todaysugar_preferences = getSharedPreferences(todaysug , Context.MODE_PRIVATE);
+        int lastClearedDayOfYear = todaysugar_preferences.getInt("last_cleared_day_of_year", -1);
+        int currentDayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 
-        //CL1 .setBackgroundColor(Color.parseColor("#FF00FF"));
+        if (lastClearedDayOfYear != currentDayOfYear) {
+            SharedPreferences.Editor editor = todaysugar_preferences.edit();
+            editor.clear();
+            editor.putInt("last_cleared_day_of_year", currentDayOfYear);
+            editor.apply();
+        }
+        //init of the another today sugar saving
+        cubesOfSugar.setText(todaysugar_preferences.getString( no_sugar,""));
+        standardValue.setText(todaysugar_preferences.getString(percent_value,"")+"% of standard value");
+
+
+
 
 
         //world
@@ -149,6 +187,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+    // rebuild the sugar cubes after app is build
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus && !hasAppBuilt) {
+            // This code will be executed when the app has fully built and is ready for user
+            String today_sugar = todaysugar_preferences.getString(no_sugar,"");
+            if (today_sugar == "") {
+                //newer of the app
+                cubesOfSugar.setText("0");
+                standardValue.setText("0 % of standard value");
+                hasAppBuilt = true;
+            }
+            else{
+                //rebuild sugar as there have record
+                Log.d("main_activity", today_sugar);
+                Generating_Sugars(today_sugar);
+                hasAppBuilt = true;
+            }
+
+        }
+    }
+
+
     public void Generating_Sugars(String numOfSugar)
     {
         int n = Integer.parseInt(numOfSugar);
@@ -238,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.apply();
 
         // make a log
-        Toast.makeText(getApplicationContext(), codeToProductName.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), codeToProductName.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
 
     }
 
@@ -311,16 +374,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // when user click save
                 if (res) {
 
-                    // Generate sugar
-                    // the formula of Standard Value (1 cube = 4 gram)
-                    // sugar consumed per day is 50 gram
-                    double formulaForStandardValue = Double.parseDouble(global_Sugar)*4.0/50.0;
-                    formulaForStandardValue*=100.0;
-                    // updating the textview in the background
-                    standardValue.setText(Double.toString(formulaForStandardValue)+"% of standard value");
-                    cubesOfSugar.setText(global_Sugar);
+// Retrieve SharedPreferences data
+                    SharedPreferences todaysugar_preferences = getSharedPreferences(todaysug, MODE_PRIVATE);
+                    String global_Sugar1 = todaysugar_preferences.getString(no_sugar, "0");
+                    today_sum_SD = Double.parseDouble(todaysugar_preferences.getString(percent_value, "0"));
+
+// Add the new global_Sugar value received from user input
+                    String new_global_Sugar = global_Sugar; // Replace this with the actual value from user input
+                    int total_global_Sugar = Integer.parseInt(global_Sugar1) + Integer.parseInt(new_global_Sugar);
+
+// Perform your calculations and update the today_sum_SD
+                    double formulaForStandardValue = total_global_Sugar * 4.0 / 50.0;
+                    formulaForStandardValue *= 100.0;
+
+                    today_sum_SD += formulaForStandardValue;
+                    Log.d("main_activity", "number of " + today_sum_SD);
+                    standardValue.setText(Double.toString(today_sum_SD) + "% of standard value");
+                    cubesOfSugar.setText(Integer.toString(total_global_Sugar));
                     Log.d("Vincent", "onActivityResult: generating sugar");
                     Generating_Sugars(targetSugar);
+
+// Save the updated values to SharedPreferences
+                    SharedPreferences.Editor sugar_editor = todaysugar_preferences.edit();
+                    sugar_editor.putString(no_sugar, Integer.toString(total_global_Sugar));
+                    sugar_editor.putString(percent_value, Double.toString(today_sum_SD));
+                    sugar_editor.apply();
+
+
                     // putting the barcode to the database
                     // for history record to retrieve
                     SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -377,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-        Log.d("main_activity", "Run any code in get color code ?");
+
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             String color = data.getStringExtra("color");
             if (color != null) {
@@ -417,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 int a = Integer.parseInt(Sugar);
                 int b = Integer.parseInt(global_Sugar);
-                global_Sugar = String.valueOf(a + b);
+                global_Sugar = String.valueOf(a);
             }
 
             targetBarcode=targetCode;
@@ -470,7 +550,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageView i = new ImageView(this);
         i.setImageResource(R.drawable.sugar); // Replace with your image resource
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(160, 160); // Adjust width and height as needed
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100); // Adjust width and height as needed
         layoutParams.leftMargin = 50; // Adjust the initial position as needed
         layoutParams.topMargin = 50;
 
