@@ -15,8 +15,8 @@ import android.widget.Toast;
 public class about_us extends AppCompatActivity {
 
     public TextView intro;
-    private TextView about_title;
-    private Button link, Back_btn;
+    private TextView about_title , about_back;
+    private Button link;
     private float dX, dY;
 
     @Override
@@ -25,7 +25,7 @@ public class about_us extends AppCompatActivity {
         setContentView(R.layout.activity_about_us);
 
         intro = findViewById(R.id.intro);
-        Back_btn = findViewById(R.id.Back_btn);
+        about_back = findViewById(R.id.about_back);
         link = findViewById(R.id.link);
         about_title = findViewById(R.id.about_title);
 
@@ -44,15 +44,16 @@ public class about_us extends AppCompatActivity {
 
             }
         });
-        Back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+       about_back.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               finish();
+           }
+       });
         // Apply onTouchListener to about_title TextView
         about_title.setOnTouchListener(onTouchListener);
-
+        intro.setOnTouchListener(onTouchListener);
+        link.setOnTouchListener(onTouchListener);
         // Add more TextView elements and apply onTouchListener to them as needed
         //pull again
     }

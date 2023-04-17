@@ -17,13 +17,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,18 +28,15 @@ import android.widget.TextView;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import java.net.Inet4Address;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import android.widget.Toast;
 
@@ -56,22 +49,15 @@ import org.jbox2d.dynamics.World;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
-    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
-    /** PLEASE DELETE THE APP AND RE LAUNCH THE APP**/
-    //pull again
+
     //database of sharedpreferences
     SharedPreferences sharedPreferences;
     SharedPreferences todaysugar_preferences;
     // perform the sugar operation
-
     public static final String productinfo ="Product_info";
-
 
     public history_record recordClass =new history_record();
     //////////////////////////////////////////////////////////////////////////////////////
@@ -90,11 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String no_sugar = "sugarKey";
     public static final String percent_value = "percent_valueKey";
 
-    Calendar calendar = Calendar.getInstance();
-    //int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
-
     double today_sum_SD = 0;
-
 
     private boolean hasAppBuilt = false;
 
@@ -114,8 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int ib_id[] = {R.id.history_ib,R.id.setting_ib,R.id.qrscan_ib};
 
     TextView current_Date, standardValue, cubesOfSugar; // three text view for updating info in background
+////////////////////////////////////////////////////////////////////////////////
+    /**           healthy message                **/
 
-    //healthy message
     private String[] messages_too_many_sugar = {
             "sims like you just intake too many sugar today",
             "Maybe water is your best friend than sugar contained drinks",
@@ -124,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Add more messages as needed
     };
 
+    //Every day health message
     private  String[] everyday_information = {
             "Avoid energy drinks and high-sugar sports drinks.",
             "Use natural sweeteners like honey or stevia instead of refined sugar.",
@@ -134,11 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             "Be aware of the sugar content in alcoholic drinks and opt for lower sugar options.",
             "Consider carbonated water or sparkling water as a low-sugar alternative."
     };
-
-
     private int messageIndex = 0;
     private int messageIndex2 = 0;
-
+/////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -189,10 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //init of the another today sugar saving
         cubesOfSugar.setText(todaysugar_preferences.getString( no_sugar,""));
         standardValue.setText(todaysugar_preferences.getString(percent_value,"")+"% of standard value");
-
-
-
-
 
         //world
         CL1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -251,8 +229,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ib_list[i].setOnClickListener(this);
         }
 
-
-
         // init TextView object
         current_Date = findViewById(R.id.current_Date);
         standardValue = findViewById(R.id.standardValue);
@@ -265,8 +241,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         //hard coding area of inputting the value into sharedpreference
-        //please DELETE THE APP after adding new product items
-
         // barcode maps to product name
         codeToProductName.put("4891513000122", "7 Up - 7 Up - Bottle 1.25L");
         codeToProductName.put("4890008100156", "Coca Cola - Coke - Bottle 1.25L");
@@ -577,9 +551,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.commit();
         editor.apply();
 
-        // make a log
-        //Toast.makeText(getApplicationContext(), codeToProductName.size()+ " records are saved!" ,Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -590,21 +561,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (i) {
                     //history xml
                     case 0:
-                        /*
-                        if(recordClass.getClass()==null) StartNewActivity(history_record.class);
-                        else recordClass.startHistoryRecordActivity(); // start the history_record activity
-                        */
                         StartNewActivity(class_array[i]);
-
                         break;
                     //setting xml
                     case 1:
                         Intent intent =new Intent(MainActivity.this,setting_page.class);
                         startActivityForResult(intent,1);
                         break;
-
                 }
-                //StartNewActivity(class_array[i]);
             }
         }
 
@@ -759,7 +723,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // when user click cancel -> nothing perform
                 else{
                     Log.d("Vincent", "onActivityResult: Refresh");
-                    //StartNewActivity(MainActivity.class);
+
                 }
             }
         }
@@ -774,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
-        //String barcodeval = (sharedPreferences.getString("CodeKeyKEY",""));
+
 
         //Trying to get the value search in the sharedpreferences
 
@@ -786,7 +750,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
 
             //builder.setTitle("Result");
-
             //builder.setMessage(result.getContents());
             String Product = codeToProductName.get(targetCode);
             String Sugar = codeToSugar.get(targetCode);
@@ -822,18 +785,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, saving.class);
             intent.putExtra("target", arr);
             startActivityForResult(intent, 999);
-            //builder.setMessage("get!\n" + "The barcode is " + result.getContents());
-            // get the bool value from saving
-
-
-            //isSave = getIntent().getStringExtra("Saving");
-
-        /*builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();*/
         }
         // if the barcode is not found
         else{
@@ -969,8 +920,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         world = new World(new Vec2(0, -9.81f)); // Create a new world with gravity
     }
 
-    public static MainActivity getInstance() {
-        return new MainActivity();
-    }
+
 
 }

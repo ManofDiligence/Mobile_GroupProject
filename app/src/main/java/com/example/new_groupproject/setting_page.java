@@ -2,6 +2,7 @@ package com.example.new_groupproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +11,31 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class setting_page extends AppCompatActivity {
     Class classarray[]={about_us.class,standard_value.class,change_bg_color.class, weight_record.class};
     String setting_array[]={"about us","About standard value","Change background color"
             ,"Weight_record"};
     ListView lv_setting;
+
+    TextView tv_setting ;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_page);
+
+
+        tv_setting = findViewById(R.id.tv_setting);
+        tv_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // add title for this page
         setTitle("Settings");
         lv_setting = findViewById(R.id.lv_setting);
@@ -62,6 +78,7 @@ public class setting_page extends AppCompatActivity {
             }
         }
     }
+
 
 
 }

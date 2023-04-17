@@ -16,14 +16,14 @@
             android:id="@+id/back_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
-            android:textSize="20sp" />
+            android:text="◀ Back"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set a goal to keep fit !"
+            android:text="Set a goal to keep fit ! \nhere to save your weight"
             android:textSize="34sp" />
 
         <LinearLayout

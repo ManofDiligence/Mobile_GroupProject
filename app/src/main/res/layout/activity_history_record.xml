@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/list_item_background"
+    android:background="@color/bg_default"
     android:orientation="vertical"
     tools:context=".history_record">
 
@@ -16,27 +16,33 @@
         app:title="History Records"
         app:titleTextColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/clearRecord"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|right"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_background"
-        android:text="Clear"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/Back_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_background"
-        android:text="Back"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        <Button
+            android:id="@+id/Back_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:layout_margin="16dp"
+            android:background="@drawable/button_background"
+            android:text="Back"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/clearRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:layout_margin="16dp"
+            android:background="@drawable/button_background"
+            android:text="Clear"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listRecords"
