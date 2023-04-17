@@ -12,13 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URI;
-
 public class about_us extends AppCompatActivity {
 
     public TextView intro;
     private TextView about_title;
-    public Button linkToGithub;
+    private Button link;
     private float dX, dY;
 
     @Override
@@ -27,17 +25,19 @@ public class about_us extends AppCompatActivity {
         setContentView(R.layout.activity_about_us);
 
         intro = findViewById(R.id.intro);
-        linkToGithub = (Button) findViewById(R.id.linkToGithub);
+        link = findViewById(R.id.link);
         about_title = findViewById(R.id.about_title);
 
         //intro.setText("");
-        linkToGithub.setOnClickListener(new View.OnClickListener() {
+        link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                     Toast.makeText(about_us.this, "Clicked", Toast.LENGTH_SHORT).show();
                     Log.d("Vincent", "onClick: clicked!");
-                    Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("https://github.com/ManofDiligence/Mobile_GroupProject"));
+                    String url = "https://github.com/ManofDiligence/Mobile_GroupProject";
+
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(i);
 
 

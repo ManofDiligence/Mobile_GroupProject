@@ -125,8 +125,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     private  String[] everyday_information = {
-            "health tips 1",
-            "health tips 2"
+            "Avoid energy drinks and high-sugar sports drinks.",
+            "Use natural sweeteners like honey or stevia instead of refined sugar.",
+            "Check labels for hidden sugars in drinks and aim for lower sugar options.",
+            "Choose unsweetened tea or coffee instead of sugary beverages.",
+            "If you crave a sweet drink, try a small serving or share with a friend.",
+            "Avoid adding sugar to coffee or tea, and choose plant-based milk alternatives.",
+            "Be aware of the sugar content in alcoholic drinks and opt for lower sugar options.",
+            "Consider carbonated water or sparkling water as a low-sugar alternative."
     };
 
 

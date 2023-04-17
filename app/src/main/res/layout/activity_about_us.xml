@@ -13,7 +13,7 @@
         android:layout_height="500dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="232dp">
+        tools:layout_editor_absoluteY="48dp">
 
         <TextView
             android:id="@+id/about_title"
@@ -30,7 +30,7 @@
             android:textSize="24sp" />
 
         <Button
-            android:id="@+id/linkToGithub"
+            android:id="@+id/link"
             android:layout_width="129dp"
             android:layout_height="81dp"
             android:text="Our Github Link" />
