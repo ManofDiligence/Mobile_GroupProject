@@ -407,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     double formulaForStandardValue = total_global_Sugar * 4.0 / 50.0;
                     formulaForStandardValue *= 100.0;
 
-                    today_sum_SD += formulaForStandardValue;
+                    today_sum_SD = formulaForStandardValue;
                     Log.d("main_activity", "number of " + today_sum_SD);
                     standardValue.setText(Double.toString(today_sum_SD) + "% of standard value");
                     cubesOfSugar.setText(Integer.toString(total_global_Sugar));
