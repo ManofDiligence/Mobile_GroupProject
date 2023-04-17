@@ -19,7 +19,7 @@ public class weight_record extends AppCompatActivity {
 
     private EditText editTextNumber;
     private Button saveButton;
-    private TextView savedNumberTextView;
+    private TextView savedNumberTextView, back_tv;
     private TextView savedDateTextView;
 
     private SharedPreferences sharedPreferences;
@@ -34,6 +34,7 @@ public class weight_record extends AppCompatActivity {
         setContentView(R.layout.activity_weight_record);
 
         editTextNumber = findViewById(R.id.weight_et);
+        back_tv = findViewById(R.id.back_tv);
         saveButton = findViewById(R.id.weight_save_btn);
         savedNumberTextView = findViewById(R.id.weight_tv);
         savedDateTextView = findViewById(R.id.date_tv);
@@ -46,7 +47,12 @@ public class weight_record extends AppCompatActivity {
                 saveData();
             }
         });
-
+        back_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         loadData();
     }
 

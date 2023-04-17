@@ -22,7 +22,7 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
     public ListView listRecords;
     private ArrayAdapter<String> adapter;
 
-    public Button clearRecord;
+    public Button clearRecord, Back_b;
     private ArrayList<String> dataList;
     private static final String DATA_LIST = "data_list";
     private static final String SHARED_PREFS = "shared_prefs";
@@ -33,6 +33,7 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_record);
 
+        Back_b = findViewById(R.id.Back_b);
         clearRecord = findViewById(R.id.clearRecord);
         listRecords = findViewById(R.id.listRecords);
         dataList = new ArrayList<>();
@@ -46,7 +47,7 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
 
         // Set the OnClickListener for the clearRecord button
         clearRecord.setOnClickListener(this);
-
+        Back_b.setOnClickListener(this);
         Log.d("Vincent", "***History record*** ");
         for (String element : dataList) {
             Log.d("Vincent", element);
@@ -55,6 +56,10 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        if(view.getId()==R.id.Back_b)
+        {
+            finish();
+        }
         if (view.getId() == R.id.clearRecord) {
             sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

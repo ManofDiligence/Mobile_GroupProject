@@ -34,6 +34,12 @@
             android:layout_width="129dp"
             android:layout_height="81dp"
             android:text="Our Github Link" />
+
+        <Button
+            android:id="@+id/Back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
     </LinearLayout>
 
     <!--random-->

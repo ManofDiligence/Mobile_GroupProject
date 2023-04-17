@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         app:title="History Records"
         app:titleTextColor="@android:color/white" />
@@ -20,10 +20,21 @@
         android:id="@+id/clearRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center|right"
         android:layout_margin="16dp"
         android:background="@drawable/button_background"
         android:text="Clear"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/Back_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_background"
+        android:text="Back"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 

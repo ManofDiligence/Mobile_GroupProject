@@ -16,7 +16,7 @@ public class about_us extends AppCompatActivity {
 
     public TextView intro;
     private TextView about_title;
-    private Button link;
+    private Button link, Back_btn;
     private float dX, dY;
 
     @Override
@@ -25,6 +25,7 @@ public class about_us extends AppCompatActivity {
         setContentView(R.layout.activity_about_us);
 
         intro = findViewById(R.id.intro);
+        Back_btn = findViewById(R.id.Back_btn);
         link = findViewById(R.id.link);
         about_title = findViewById(R.id.about_title);
 
@@ -41,6 +42,12 @@ public class about_us extends AppCompatActivity {
                     startActivity(i);
 
 
+            }
+        });
+        Back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
         // Apply onTouchListener to about_title TextView
