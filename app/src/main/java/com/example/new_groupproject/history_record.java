@@ -37,16 +37,15 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
         listRecords = findViewById(R.id.listRecords);
         dataList = new ArrayList<>();
 
-        // Use android.R.layout.simple_list_item_1 instead of dataList
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
         listRecords.setAdapter(adapter);
 
         updateDataListFromSharedPreferences();
 
-        // Removed unnecessary newList and adapter1
-
-        // Updating the array adapter after inserting
         adapter.notifyDataSetChanged();
+
+        // Set the OnClickListener for the clearRecord button
+        clearRecord.setOnClickListener(this);
 
         Log.d("Vincent", "***History record*** ");
         for (String element : dataList) {
@@ -56,11 +55,15 @@ public class history_record extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.clearRecord)
-        {
+        if (view.getId() == R.id.clearRecord) {
+            sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
+            editor.remove(DATA_LIST); // Change this line from editor.clear() to editor.remove(DATA_LIST)
             editor.apply();
+
+            // Clear the dataList and notify the adapter
+            dataList.clear();
+            adapter.notifyDataSetChanged();
         }
     }
 

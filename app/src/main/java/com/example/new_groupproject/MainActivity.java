@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Date currentTime = new Date(currentTimeMillis);
 
 // create a date format for displaying the time
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
 // set the time zone of the date format to the current time zone
                     dateFormat.setTimeZone(t);
@@ -455,7 +455,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     //current_Date.setText(time);
 
-                    dataList.add(codeToProductName.get(targetBarcode)+"  Cubes of sugar: "+codeToSugar.get(targetBarcode)+ currentTimeString+"  " +t.getDisplayName());
+                    String partition = "";
+                    String ml1 = "";
+                    String ml2 = "";
+                    partition+=codeToProductName.get(targetBarcode);
+
+                    char d = partition.charAt(partition.length()-1);
+                    if(d=='L')
+                    {
+                        int index = partition.length()-1;
+                        while(partition.charAt(index)!=' ')
+                        {
+                            ml1+=partition.charAt(index);
+                            index--;
+                        }
+                    }
+                    int i = ml1.length()-1;
+                    while(i>=0)
+                    {
+                        ml2 += ml1.charAt(i);
+                        i--;
+                    }
+                    ml1 = "";
+                    i=0;
+                    while(partition.charAt(i)!=ml2.charAt(0))
+                    {
+                        ml1+=partition.charAt(i);
+                        i++;
+                    }
+                    dataList.add(ml1+"\n"+ml2+"\nCubes of sugar: "+codeToSugar.get(targetBarcode)+" \n"+ currentTimeString+"  " +" Hong Kong");
 
                     json = gson.toJson(dataList);
                     editor.putString(DATA_LIST, json);
