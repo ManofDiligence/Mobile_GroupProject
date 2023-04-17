@@ -8,11 +8,33 @@
     android:background="@color/bg_default"
     tools:context=".about_us">
 
-    <TextView
-        android:id="@+id/about_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ABOUT_US"
-        android:textSize="34sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="232dp">
+
+        <TextView
+            android:id="@+id/about_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABOUT_US"
+            android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We are just a group of student in HKCC, who are trying to clone the app called Sato-san."
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/linkToGithub"
+            android:layout_width="129dp"
+            android:layout_height="81dp"
+            android:text="Our Github Link" />
+    </LinearLayout>
+
     <!--random-->
 </androidx.constraintlayout.widget.ConstraintLayout>
