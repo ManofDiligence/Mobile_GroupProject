@@ -3,42 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/list_item_background"
     android:orientation="vertical"
     tools:context=".history_record">
 
-
-    <TextView
-                android:id="@+id/records"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="History Records"
-                android:textSize="34sp" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="History Records"
+        app:titleTextColor="@android:color/white" />
 
     <Button
         android:id="@+id/clearRecord"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear "
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_background"
+        android:text="Clear"
+        android:textColor="@android:color/white"
         android:textSize="20sp" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-        </LinearLayout>
-    </ScrollView>
 
     <ListView
         android:id="@+id/listRecords"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/divider_color"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list_item_selector" />
 
 </LinearLayout>

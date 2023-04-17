@@ -483,7 +483,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ml1+=partition.charAt(i);
                         i++;
                     }
-                    dataList.add(ml1+"\n"+ml2+"\nCubes of sugar: "+codeToSugar.get(targetBarcode)+" \n"+ currentTimeString+"  " +" Hong Kong");
+                    String s = codeToSugar.get(targetBarcode);
+                    dataList.add(s+"  "+  ml1+  "("+ml2+")" + " "+ currentTimeString);
 
                     json = gson.toJson(dataList);
                     editor.putString(DATA_LIST, json);

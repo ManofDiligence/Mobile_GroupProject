@@ -20,4 +20,6 @@
     <color name="bg_green">#29d602</color>
     <color name="bg_pink">#f26dad</color>
     <color name="bg_dark_pink">#d40066</color>
+    <color name="background_color">#F5F5F5</color>
+    <color name="divider_color">#D3D3D3</color>
 </resources>
