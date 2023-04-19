@@ -40,20 +40,22 @@ public class about_us extends AppCompatActivity {
 
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(i);
-
+                Log.i("about_us", "clicked");
 
             }
         });
        about_back.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+               Log.i("about_us", "BACK!");
                finish();
            }
        });
         // Apply onTouchListener to about_title TextView
         about_title.setOnTouchListener(onTouchListener);
         intro.setOnTouchListener(onTouchListener);
-        link.setOnTouchListener(onTouchListener);
+
+
         // Add more TextView elements and apply onTouchListener to them as needed
         //pull again
     }

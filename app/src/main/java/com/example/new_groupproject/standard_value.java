@@ -36,6 +36,7 @@ public class standard_value extends AppCompatActivity implements View.OnClickLis
                 String url = "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
+
             }
         });
 
