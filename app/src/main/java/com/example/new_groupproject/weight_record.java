@@ -55,7 +55,6 @@ public class weight_record extends AppCompatActivity {
         });
         loadData();
     }
-
     private void saveData() {
         String userInput = editTextNumber.getText().toString();
         if (userInput.isEmpty()) {

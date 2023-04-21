@@ -738,8 +738,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->
     {
-
-
         //Trying to get the value search in the sharedpreferences
 
         String targetCode = result.getContents();
@@ -748,7 +746,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check if the database contains this barcode
         // if found -> performing the sugar adding
         if(codeToProductName.containsKey(targetCode)&&codeToSugar.containsKey(targetCode)){
-
             //builder.setTitle("Result");
             //builder.setMessage(result.getContents());
             String Product = codeToProductName.get(targetCode);
@@ -768,9 +765,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int b = Integer.parseInt(global_Sugar);
                 global_Sugar = String.valueOf(a);
             }
-
             targetBarcode=targetCode;
-
             if(!isExisted)
             {
                 Log.d("Vincent", "The product is not searched!");
@@ -778,7 +773,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else{
                 Log.d("Vincent", "The product is searched!");
             }
-
             String []arr = new String[2];
             arr[0] = Product;
             arr[1] = Sugar;
@@ -812,10 +806,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutParams.leftMargin = 50; // Adjust the initial position as needed
         layoutParams.topMargin = 50;
 
-        // Set layout rules for the new ImageView
-        //layoutParams.addRule(RelativeLayout.BELOW, R.id.button); // make the new ImageView appear below the button
-        //layoutParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.button); // align the new ImageView with the left edge of the button
-
         i.setLayoutParams(layoutParams);
         CL1.addView(i, 0); // Add the new ImageView at index 0
 
@@ -823,7 +813,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(layoutParams.leftMargin / 100.0f, layoutParams.topMargin / 100.0f); // Divide by 100 to convert pixels to meters
-
         // Set allowSleep to false to prevent the body from going to sleep
         bodyDef.allowSleep = false;
 
@@ -835,7 +824,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Body body = world.createBody(bodyDef);
         body.createFixture(shape, 1.0f);
         i.setTag(body); // Store the JBox2D body as a tag in the ImageView
-
         imageViews.add(i);
     }
 
