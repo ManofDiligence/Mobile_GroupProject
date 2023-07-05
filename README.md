@@ -5,4 +5,3 @@
 
 ### Language or framework
 1. Java
-2. OOP
